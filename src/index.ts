@@ -1,8 +1,8 @@
+import { app } from './app/application';
 import './style.scss';
 
-
 function bootstrap(): void {
-  console.log('test');  
+  app.init();
 }
 
 bootstrap();
