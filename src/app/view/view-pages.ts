@@ -1,7 +1,7 @@
 import { HashPath, IPageComponent } from '../types';
 
 export const homePage: IPageComponent = {
-  render: (): string => {
+  render: () => {
     document.title = 'RSLang - Главная';
     return `
       <section>
@@ -19,7 +19,7 @@ export const homePage: IPageComponent = {
 };
 
 export const bookPage: IPageComponent = {
-  render: (): string => {
+  render: (params) => {
     document.title = 'RSLang - Учебник';
     return `
       <section>
@@ -31,13 +31,20 @@ export const bookPage: IPageComponent = {
         <a href="${HashPath.aboutTeamPage}">about team</a>
         <br />
         <h1>Учебник</h1>
-        <p>Раздел 1 ...</p>
+        <h3>Раздел ${params}</h3>
+        <ol>
+          <li><a href="${HashPath.bookPage + '?cat=1'}">Раздел 1</a></li>
+          <li><a href="${HashPath.bookPage + '?cat=2'}">Раздел 2</a></li>
+          <li><a href="${HashPath.bookPage + '?cat=3'}">Раздел 3</a></li>
+          <li><a href="${HashPath.bookPage + '?cat=4'}">Раздел 4</a></li>
+          <li><a href="${HashPath.bookPage + '?cat=5'}">Раздел 5</a></li>
+        </ol>
       </section>`;
   },
 };
 
 export const audioCallPage: IPageComponent = {
-  render: (): string => {
+  render: () => {
     document.title = 'RSLang - Аудио вызов';
     return `
       <section>
@@ -55,7 +62,7 @@ export const audioCallPage: IPageComponent = {
 };
 
 export const sprintPage: IPageComponent = {
-  render: (): string => {
+  render: () => {
     document.title = 'RSLang - Спринт';
     return `
       <section>
@@ -73,7 +80,7 @@ export const sprintPage: IPageComponent = {
 };
 
 export const statsPage: IPageComponent = {
-  render: (): string => {
+  render: () => {
     document.title = 'RSLang - Статистика';
     return `
       <section>
@@ -91,7 +98,7 @@ export const statsPage: IPageComponent = {
 };
 
 export const aboutTeamPage: IPageComponent = {
-  render: (): string => {
+  render: () => {
     document.title = 'RSLang - О команде';
     return `
       <section>

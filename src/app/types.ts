@@ -1,4 +1,4 @@
-type TRender = () => string;
+type TRender = (params: string) => string;
 
 export interface IPageComponent {
   render: TRender;

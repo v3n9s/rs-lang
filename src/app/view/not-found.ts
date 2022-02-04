@@ -1,11 +1,11 @@
 import { IPageComponent } from '../types';
 
 export const notFoundPage: IPageComponent = {
-  render: (): string => {
+  render: (urlStr) => {
     return `
       <section>
-        <h1>404</h1>
-        <p>Not found.</p>
+        <h1>404 - Page not found</h1>
+        <p>${urlStr}</p>
       </section>`;
   },
 };
