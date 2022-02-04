@@ -6,7 +6,6 @@ export const notFoundPage: IPageComponent = {
       <section>
         <h1>404</h1>
         <p>Not found.</p>
-        <a href="/">\< home</a>
       </section>`;
   },
 };
