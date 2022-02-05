@@ -28,6 +28,7 @@ export const homePage: IPageComponent = {
 
 export const bookPage: IPageComponent = {
   render: (params) => {
+    document.title = 'RSLang - Учебник';
     const node = document.querySelector('#app') as HTMLDivElement;
     node.innerHTML = '';
 
