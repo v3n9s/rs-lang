@@ -1,13 +1,11 @@
+import { audioCallPage } from './view/game-audio-call/view-pages';
+import { sprintPage } from './view/game-sprint/view-pages';
 import { HashPath, IPageComponent } from './types';
-import { notFoundPage } from './view/not-found';
-import {
-  aboutTeamPage,
-  audioCallPage,
-  bookPage,
-  homePage,
-  sprintPage,
-  statsPage,
-} from './view/view-pages';
+import { aboutTeamPage } from './view/about-team-page/view-pages';
+import { bookPage } from './view/book-page/view-pages';
+import { homePage } from './view/home-page/view-pages';
+import { notFoundPage } from './view/not-found-page/not-found';
+import { statsPage } from './view/stats-page/view-pages';
 
 interface IHashPathComponent {
   hashPath: string;

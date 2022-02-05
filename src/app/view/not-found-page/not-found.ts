@@ -1,4 +1,4 @@
-import { IPageComponent } from '../types';
+import { IPageComponent } from '../../types';
 
 export const notFoundPage: IPageComponent = {
   render: (urlStr) => {
