@@ -2,18 +2,34 @@ import { TPageComponent } from '../../router';
 
 export const getNotFoundPage: TPageComponent = (params) => {
   document.title = 'RSLang - Page not found';
-  const node = document.querySelector('#app') as HTMLDivElement;
-  node.innerHTML = '';
 
-  const mainContainer = document.createElement('main');
+  const appContainer = document.querySelector('#app') as HTMLDivElement;
 
-  mainContainer.innerHTML = `
-      <br>
-      <br>
-      <h1>404 - page not found</h1>
-      <p>Path: ${params}</p>
-      <br>
-      <br>`;
+  let headerContainer = document.querySelector('header');
+  let mainContainer = document.querySelector('main');
+  let footerContainer = document.querySelector('footer');
 
-  node.append(mainContainer);
+  if (headerContainer) {
+    headerContainer.remove();
+  }
+
+  if (footerContainer) {
+    footerContainer.remove();
+  }
+
+  const mainContent = `
+    <br>
+    <br>
+    <h1>404 - page not found</h1>
+    <p>Path: ${params}</p>
+    <br>
+    <br>`;
+
+  if (!mainContainer) {
+    mainContainer = document.createElement('main');
+    mainContainer.innerHTML = mainContent;
+    appContainer.append(mainContainer);
+  } else {
+    mainContainer.innerHTML = mainContent;
+  }
 };

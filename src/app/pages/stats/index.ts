@@ -4,17 +4,20 @@ import { header } from '../components/header';
 
 export const getStatsPage: TPageComponent = () => {
   document.title = 'RSLang - Статистика';
-  const node = document.querySelector('#app') as HTMLDivElement;
-  node.innerHTML = '';
 
-  const headerContainer = document.createElement('header');
-  const mainContainer = document.createElement('main');
-  const footerContainer = document.createElement('footer');
+  const appContainer = document.querySelector('#app') as HTMLDivElement;
 
-  headerContainer.innerHTML = header.render();
-  footerContainer.innerHTML = footer.render();
+  let headerContainer = document.querySelector('header');
+  let mainContainer = document.querySelector('main');
+  let footerContainer = document.querySelector('footer');
 
-  mainContainer.innerHTML = `
+  if (!headerContainer) {
+    headerContainer = document.createElement('header');
+    headerContainer.innerHTML = header.render();
+    appContainer.prepend(headerContainer);
+  }
+
+  const mainContent = `
     <br>
     <br>
     <h1>Статистика</h1>
@@ -22,5 +25,17 @@ export const getStatsPage: TPageComponent = () => {
     <br>
     <br>`;
 
-  node.append(headerContainer, mainContainer, footerContainer);
+  if (!mainContainer) {
+    mainContainer = document.createElement('main');
+    mainContainer.innerHTML = mainContent;
+    appContainer.append(mainContainer);
+  } else {
+    mainContainer.innerHTML = mainContent;
+  }
+
+  if (!footerContainer) {
+    footerContainer = document.createElement('footer');
+    footerContainer.innerHTML = footer.render();
+    appContainer.append(footerContainer);
+  }
 };

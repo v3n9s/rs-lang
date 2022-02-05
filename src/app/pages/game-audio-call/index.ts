@@ -1,20 +1,26 @@
 import { TPageComponent } from '../../router';
-import { footer } from '../components/footer';
-import { header } from '../components/header';
+import { HashPath } from '../../types';
 
 export const getAudioCallPage: TPageComponent = () => {
+  console.log(location.hash);
   document.title = 'RSLang - Аудио вызов';
-  const node = document.querySelector('#app') as HTMLDivElement;
-  node.innerHTML = '';
 
-  const headerContainer = document.createElement('header');
-  const mainContainer = document.createElement('main');
-  const footerContainer = document.createElement('footer');
+  const appContainer = document.querySelector('#app') as HTMLDivElement;
 
-  headerContainer.innerHTML = header.render();
-  footerContainer.innerHTML = footer.render();
+  let headerContainer = document.querySelector('header');
+  let mainContainer = document.querySelector('main');
+  let footerContainer = document.querySelector('footer');
 
-  mainContainer.innerHTML = `
+  if (headerContainer) {
+    headerContainer.remove();
+  }
+
+  if (footerContainer) {
+    footerContainer.remove();
+  }
+
+  const mainContent = `
+   <a href="${HashPath.homePage}">| home |</a>
     <br>
     <br>
     <h1>Аудио вызов</h1>
@@ -22,5 +28,11 @@ export const getAudioCallPage: TPageComponent = () => {
     <br>
     <br>`;
 
-  node.append(headerContainer, mainContainer, footerContainer);
+  if (!mainContainer) {
+    mainContainer = document.createElement('main');
+    mainContainer.innerHTML = mainContent;
+    appContainer.append(mainContainer);
+  } else {
+    mainContainer.innerHTML = mainContent;
+  }
 };
