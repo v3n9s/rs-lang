@@ -2,7 +2,6 @@ import { TPageComponent } from '../../router';
 import { HashPath } from '../../types';
 
 export const getAudioCallPage: TPageComponent = () => {
-  console.log(location.hash);
   document.title = 'RSLang - Аудио вызов';
 
   const appContainer = document.querySelector('#app') as HTMLDivElement;
