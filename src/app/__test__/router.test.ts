@@ -1,4 +1,4 @@
-import { getHashPath, getSearchParams, hasSearchParams } from '../router';
+import { getHashPath, getSearchParams, hasSearchParams, parseLocation } from '../router';
 
 describe('Test "hasSearchParams" function', () => {
   test("Str 'some-root' should be equal to 'false'", () => {
@@ -58,26 +58,23 @@ describe('Test "getSearchParams" function', () => {
   });
 });
 
-// describe('Test "getSearchParams" function', () => {
-//   test("Str 'some-root' should be equal to '' ", () => {
-//     expect(getSearchParams('some-root')).toBe('');
-//   });
-// });
+describe('Test "parseLocation" function', () => {
+  const loc = new URL('http://localhost:5000/#/home');
 
-// export function parseLocation(location: Location): ILocationParams {
-//   const hash = location.hash.toLowerCase() || '/';
-//   const hashPath = getHashPath(hash);
-//   const searchParams = getSearchParams(hash);
-//   return {
-//     hashPath,
-//     searchParams,
-//   };
-// }
-// export function findComponentByPath(hashPath: string, routesArr: Array<IHashPathComponent>): IHashPathComponent | null {
-//   if (hashPath === '/' || hashPath === '#/') {
-//     return routes[0];
-//   }
-//   const component =
-//     routesArr.find((item) => item.hashPath.match(new RegExp(`^\\${hashPath}$`, 'i'))) ?? null;
-//   return component;
-// }
+  let result = {
+    hashPath: '#/home',
+    searchParams: '',
+  };
+  test(`Location '${loc.href}' should be equal to ${JSON.stringify(result)}`, () => {
+    expect(parseLocation(loc)).toEqual(result);
+  });
+
+  loc.hash = '#/some?cat=123&page=22';
+  result = {
+    hashPath: '#/some',
+    searchParams: '?cat=123&page=22',
+  };
+  test(`Location '${loc.href}' should be equal to ${JSON.stringify(result)}`, () => {
+    expect(parseLocation(loc)).toEqual(result);
+  });
+});

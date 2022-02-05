@@ -47,7 +47,7 @@ export function getSearchParams(hash: string): string {
   return '';
 }
 
-export function parseLocation(location: Location): ILocationParams {
+export function parseLocation(location: Location | URL): ILocationParams {
   const hash = location.hash.toLowerCase() || '/';
 
   const hashPath = getHashPath(hash);
