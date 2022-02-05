@@ -1,35 +1,46 @@
 import { HashPath, IPageComponent } from '../types';
+import { footer, header } from './view-components';
 
 export const homePage: IPageComponent = {
   render: () => {
     document.title = 'RSLang - Главная';
-    return `
-      <section>
-        <a href="${HashPath.homePage}">home</a>
-        <a href="${HashPath.bookPage}">book</a>
-        <a href="${HashPath.audioCallPage}">game1</a>
-        <a href="${HashPath.sprintPage}">game2</a>
-        <a href="${HashPath.statsPage}">stats</a>
-        <a href="${HashPath.aboutTeamPage}">about team</a>
-        <br />
-        <h1>Об учебнике</h1>
-        <p>Учебник клёвый. Потому что.</p>
-      </section>`;
+    const node = document.querySelector('#app') as HTMLDivElement;
+    node.innerHTML = '';
+
+    const headerContainer = document.createElement('header');
+    const mainContainer = document.createElement('main');
+    const footerContainer = document.createElement('footer');
+
+    headerContainer.innerHTML = header.render();
+    footerContainer.innerHTML = footer.render();
+
+    mainContainer.innerHTML = `
+      <br>
+      <br>
+      <h1>Об учебнике</h1>
+      <p>Учебник клёвый. Потому что.</p>
+      <br>
+      <br>`;
+
+    node.append(headerContainer, mainContainer, footerContainer);
   },
 };
 
 export const bookPage: IPageComponent = {
   render: (params) => {
-    document.title = 'RSLang - Учебник';
-    return `
-      <section>
-        <a href="${HashPath.homePage}">home</a>
-        <a href="${HashPath.bookPage}">book</a>
-        <a href="${HashPath.audioCallPage}">game1</a>
-        <a href="${HashPath.sprintPage}">game2</a>
-        <a href="${HashPath.statsPage}">stats</a>
-        <a href="${HashPath.aboutTeamPage}">about team</a>
-        <br />
+    const node = document.querySelector('#app') as HTMLDivElement;
+    node.innerHTML = '';
+
+    const headerContainer = document.createElement('header');
+    const mainContainer = document.createElement('main');
+    const footerContainer = document.createElement('footer');
+
+    headerContainer.innerHTML = header.render();
+    footerContainer.innerHTML = footer.render();
+
+    mainContainer.innerHTML = `
+        <br>
+        <br>
         <h1>Учебник</h1>
         <h3>Раздел ${params}</h3>
         <ol>
@@ -39,78 +50,109 @@ export const bookPage: IPageComponent = {
           <li><a href="${HashPath.bookPage + '?cat=4'}">Раздел 4</a></li>
           <li><a href="${HashPath.bookPage + '?cat=5'}">Раздел 5</a></li>
         </ol>
-      </section>`;
+        <br>
+        <br>`;
+
+    node.append(headerContainer, mainContainer, footerContainer);
   },
 };
 
 export const audioCallPage: IPageComponent = {
   render: () => {
     document.title = 'RSLang - Аудио вызов';
-    return `
-      <section>
-        <a href="${HashPath.homePage}">home</a>
-        <a href="${HashPath.bookPage}">book</a>
-        <a href="${HashPath.audioCallPage}">game1</a>
-        <a href="${HashPath.sprintPage}">game2</a>
-        <a href="${HashPath.statsPage}">stats</a>
-        <a href="${HashPath.aboutTeamPage}">about team</a>
-        <br />
+    const node = document.querySelector('#app') as HTMLDivElement;
+    node.innerHTML = '';
+
+    const headerContainer = document.createElement('header');
+    const mainContainer = document.createElement('main');
+    const footerContainer = document.createElement('footer');
+
+    headerContainer.innerHTML = header.render();
+    footerContainer.innerHTML = footer.render();
+
+    mainContainer.innerHTML = `
+        <br>
+        <br>
         <h1>Аудио вызов</h1>
         <p>Ау!</p>
-      </section>`;
+        <br>
+        <br>`;
+
+    node.append(headerContainer, mainContainer, footerContainer);
   },
 };
 
 export const sprintPage: IPageComponent = {
   render: () => {
     document.title = 'RSLang - Спринт';
-    return `
-      <section>
-        <a href="${HashPath.homePage}">home</a>
-        <a href="${HashPath.bookPage}">book</a>
-        <a href="${HashPath.audioCallPage}">game1</a>
-        <a href="${HashPath.sprintPage}">game2</a>
-        <a href="${HashPath.statsPage}">stats</a>
-        <a href="${HashPath.aboutTeamPage}">about team</a>
-        <br />
+    const node = document.querySelector('#app') as HTMLDivElement;
+    node.innerHTML = '';
+
+    const headerContainer = document.createElement('header');
+    const mainContainer = document.createElement('main');
+    const footerContainer = document.createElement('footer');
+
+    headerContainer.innerHTML = header.render();
+    footerContainer.innerHTML = footer.render();
+
+    mainContainer.innerHTML = `
+        <br>
+        <br>
         <h1>Спринт</h1>
         <p>Играем!</p>
-      </section>`;
+        <br>
+        <br>`;
+
+    node.append(headerContainer, mainContainer, footerContainer);
   },
 };
 
 export const statsPage: IPageComponent = {
   render: () => {
     document.title = 'RSLang - Статистика';
-    return `
-      <section>
-        <a href="${HashPath.homePage}">home</a>
-        <a href="${HashPath.bookPage}">book</a>
-        <a href="${HashPath.audioCallPage}">game1</a>
-        <a href="${HashPath.sprintPage}">game2</a>
-        <a href="${HashPath.statsPage}">stats</a>
-        <a href="${HashPath.aboutTeamPage}">about team</a>
-        <br />
+    const node = document.querySelector('#app') as HTMLDivElement;
+    node.innerHTML = '';
+
+    const headerContainer = document.createElement('header');
+    const mainContainer = document.createElement('main');
+    const footerContainer = document.createElement('footer');
+
+    headerContainer.innerHTML = header.render();
+    footerContainer.innerHTML = footer.render();
+
+    mainContainer.innerHTML = `
+        <br>
+        <br>
         <h1>Статистика</h1>
         <p>123 ...</p>
-      </section>`;
+        <br>
+        <br>`;
+
+    node.append(headerContainer, mainContainer, footerContainer);
   },
 };
 
 export const aboutTeamPage: IPageComponent = {
   render: () => {
     document.title = 'RSLang - О команде';
-    return `
-      <section>
-        <a href="${HashPath.homePage}">home</a>
-        <a href="${HashPath.bookPage}">book</a>
-        <a href="${HashPath.audioCallPage}">game1</a>
-        <a href="${HashPath.sprintPage}">game2</a>
-        <a href="${HashPath.statsPage}">stats</a>
-        <a href="${HashPath.aboutTeamPage}">about team</a>
-        <br />
-        <h1>О команде</h1>
-        <p>1, 2, 3.</p>
-      </section>`;
+    const node = document.querySelector('#app') as HTMLDivElement;
+    node.innerHTML = '';
+
+    const headerContainer = document.createElement('header');
+    const mainContainer = document.createElement('main');
+    const footerContainer = document.createElement('footer');
+
+    headerContainer.innerHTML = header.render();
+    footerContainer.innerHTML = footer.render();
+
+    mainContainer.innerHTML = `
+      <br>
+      <br>
+      <h1>О команде</h1>
+      <p>1, 2, 3.</p>
+      <br>
+      <br>`;
+
+    node.append(headerContainer, mainContainer, footerContainer);
   },
 };

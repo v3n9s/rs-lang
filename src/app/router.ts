@@ -72,22 +72,20 @@ function findComponentByPath(
 }
 
 export function router(): void {
-  const appContainer = document.querySelector('#app') as HTMLDivElement;
-
   const { hashPath, searchParams } = parseLocation(location);
   const hashPathComponent = findComponentByPath(hashPath, routes);
 
   if (hashPathComponent) {
     if (hashPathComponent.hasParams) {
-      appContainer.innerHTML = hashPathComponent.component.render(searchParams);
+      hashPathComponent.component.render(searchParams);
     } else {
       if (searchParams) {
-        appContainer.innerHTML = notFoundPage.render(location.toString());
+        notFoundPage.render(location.toString());
       } else {
-        appContainer.innerHTML = hashPathComponent.component.render(searchParams);
+        hashPathComponent.component.render(searchParams);
       }
     }
   } else {
-    appContainer.innerHTML = notFoundPage.render(location.toString());
+    notFoundPage.render(location.toString());
   }
 }
