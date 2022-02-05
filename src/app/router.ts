@@ -1,15 +1,17 @@
-import { audioCallPage } from './view/game-audio-call/view-pages';
-import { sprintPage } from './view/game-sprint/view-pages';
-import { HashPath, IPageComponent } from './types';
-import { aboutTeamPage } from './view/about-team-page/view-pages';
-import { bookPage } from './view/book-page/view-pages';
-import { homePage } from './view/home-page/view-pages';
-import { notFoundPage } from './view/not-found-page/not-found';
-import { statsPage } from './view/stats-page/view-pages';
+import { getAudioCallPage } from './pages/game-audio-call';
+import { getSprintPage } from './pages/game-sprint';
+import { HashPath } from './types';
+import { getAboutTeamPage } from './pages/about-team';
+import { getBookPage } from './pages/book';
+import { getHomePage } from './pages/home';
+import { getNotFoundPage } from './pages/not-found';
+import { getStatsPage } from './pages/stats';
+
+export type TPageComponent = (params: string) => void;
 
 interface IHashPathComponent {
   hashPath: string;
-  component: IPageComponent;
+  componentFunc: TPageComponent;
   hasParams: boolean;
 }
 
@@ -19,33 +21,33 @@ interface ILocationParams {
 }
 
 const routes: Array<IHashPathComponent> = [
-  { hashPath: HashPath.homePage, component: homePage, hasParams: false },
-  { hashPath: HashPath.bookPage, component: bookPage, hasParams: true },
-  { hashPath: HashPath.audioCallPage, component: audioCallPage, hasParams: false },
-  { hashPath: HashPath.sprintPage, component: sprintPage, hasParams: false },
-  { hashPath: HashPath.statsPage, component: statsPage, hasParams: false },
-  { hashPath: HashPath.aboutTeamPage, component: aboutTeamPage, hasParams: false },
+  { hashPath: HashPath.homePage, componentFunc: getHomePage, hasParams: false },
+  { hashPath: HashPath.bookPage, componentFunc: getBookPage, hasParams: true },
+  { hashPath: HashPath.audioCallPage, componentFunc: getAudioCallPage, hasParams: false },
+  { hashPath: HashPath.sprintPage, componentFunc: getSprintPage, hasParams: false },
+  { hashPath: HashPath.statsPage, componentFunc: getStatsPage, hasParams: false },
+  { hashPath: HashPath.aboutTeamPage, componentFunc: getAboutTeamPage, hasParams: false },
 ];
 
-function hasSearchParams(hash: string): boolean {
+export function hasSearchParams(hash: string): boolean {
   return hash.indexOf('?') !== -1;
 }
 
-function getHashPath(hash: string): string {
+export function getHashPath(hash: string): string {
   if (hasSearchParams(hash)) {
     return hash.slice(0, hash.indexOf('?'));
   }
   return hash;
 }
 
-function getSearchParams(hash: string): string {
+export function getSearchParams(hash: string): string {
   if (hasSearchParams(hash)) {
     return hash.slice(hash.indexOf('?'));
   }
   return '';
 }
 
-function parseLocation(location: Location): ILocationParams {
+export function parseLocation(location: Location): ILocationParams {
   const hash = location.hash.toLowerCase() || '/';
 
   const hashPath = getHashPath(hash);
@@ -57,7 +59,7 @@ function parseLocation(location: Location): ILocationParams {
   };
 }
 
-function findComponentByPath(
+export function findComponentByPath(
   hashPath: string,
   routesArr: Array<IHashPathComponent>,
 ): IHashPathComponent | null {
@@ -75,15 +77,15 @@ export function router(): void {
 
   if (hashPathComponent) {
     if (hashPathComponent.hasParams) {
-      hashPathComponent.component.render(searchParams);
+      hashPathComponent.componentFunc(searchParams);
     } else {
       if (searchParams) {
-        notFoundPage.render(location.toString());
+        getNotFoundPage(location.toString());
       } else {
-        hashPathComponent.component.render(searchParams);
+        hashPathComponent.componentFunc(searchParams);
       }
     }
   } else {
-    notFoundPage.render(location.toString());
+    getNotFoundPage(location.toString());
   }
 }
