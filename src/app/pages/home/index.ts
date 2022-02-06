@@ -1,6 +1,6 @@
 import { decrCount, incrCount } from '../../redux/counter';
 import { TPageComponent } from '../../router';
-import { store } from '../../store';
+import { store } from '../../redux/store';
 import { getFooter } from '../components/footer';
 import { header } from '../components/header';
 
