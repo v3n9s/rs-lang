@@ -1,11 +1,25 @@
+import { decrCount, incrCount } from '../../redux/counter';
 import { TPageComponent } from '../../router';
+import { store } from '../../store';
 import { getFooter } from '../components/footer';
 import { header } from '../components/header';
+
+const incrBtnHandler = (element: HTMLElement): void => {
+  store.dispatch(incrCount(1));
+  let value = store.getState().counter.value;
+  element.textContent = `Value: ${value}`;
+};
+
+const decrBtnHandler = (element: HTMLElement): void => {
+  store.dispatch(decrCount(1));
+  let value = store.getState().counter.value;
+  element.textContent = `Value: ${value}`;
+};
 
 const createMain = (): HTMLElement => {
   const node = document.createElement('section');
 
-  let count = 0;
+  let count = store.getState().counter.value;
 
   node.innerHTML = `
     <br>
@@ -14,7 +28,7 @@ const createMain = (): HTMLElement => {
     <p>Учебник клёвый. Потому что.</p>
     <br>
     <br>
-    <h2 id="counter">${count}</h2> 
+    <h2 id="counter">Value: ${count}</h2> 
     <br>
     <button id="dec-btn" type="button">__dec__</button>
     <button id="inc-btn" type="button">__inc__</button>
@@ -26,13 +40,11 @@ const createMain = (): HTMLElement => {
   const counter = node.querySelector('#counter') as HTMLElement;
 
   incBtn.addEventListener('click', () => {
-    count += 1;
-    counter.textContent = count.toString();
+    incrBtnHandler(counter);
   });
 
   decBtn.addEventListener('click', () => {
-    count -= 1;
-    counter.textContent = count.toString();
+    decrBtnHandler(counter);
   });
 
   return node;
