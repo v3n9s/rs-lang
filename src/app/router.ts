@@ -20,7 +20,7 @@ interface ILocationParams {
   searchParams: string;
 }
 
-const routes: Array<IHashPathComponent> = [
+export const routes: Array<IHashPathComponent> = [
   { hashPath: HashPath.homePage, componentFunc: getHomePage, hasParams: false },
   { hashPath: HashPath.bookPage, componentFunc: getBookPage, hasParams: true },
   { hashPath: HashPath.audioCallPage, componentFunc: getAudioCallPage, hasParams: false },
@@ -66,9 +66,9 @@ export function findComponentByPath(
   if (hashPath === '/' || hashPath === '#/') {
     return routes[0];
   }
-  const component =
+  const componentFunc =
     routesArr.find((item) => item.hashPath.match(new RegExp(`^\\${hashPath}$`, 'i'))) ?? null;
-  return component;
+  return componentFunc;
 }
 
 export function router(): void {
