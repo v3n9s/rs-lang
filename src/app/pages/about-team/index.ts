@@ -1,5 +1,5 @@
 import { TPageComponent } from '../../router';
-import { footer } from '../components/footer';
+import { getFooter } from '../components/footer';
 import { header } from '../components/header';
 
 export const getAboutTeamPage: TPageComponent = () => {
@@ -35,7 +35,7 @@ export const getAboutTeamPage: TPageComponent = () => {
 
   if (!footerContainer) {
     footerContainer = document.createElement('footer');
-    footerContainer.innerHTML = footer.render();
+    footerContainer.innerHTML = getFooter();
     appContainer.append(footerContainer);
   }
 };

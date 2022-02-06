@@ -1,6 +1,6 @@
 import { TPageComponent } from '../../router';
-import { footer } from '../components/footer';
 import { header } from '../components/header';
+import { getFooter } from '../components/footer';
 
 export const getStatsPage: TPageComponent = () => {
   document.title = 'RSLang - Статистика';
@@ -35,7 +35,7 @@ export const getStatsPage: TPageComponent = () => {
 
   if (!footerContainer) {
     footerContainer = document.createElement('footer');
-    footerContainer.innerHTML = footer.render();
+    footerContainer.innerHTML = getFooter();
     appContainer.append(footerContainer);
   }
 };

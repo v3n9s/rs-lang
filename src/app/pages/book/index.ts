@@ -1,6 +1,6 @@
 import { TPageComponent } from '../../router';
 import { HashPath } from '../../types';
-import { footer } from '../components/footer';
+import { getFooter } from '../components/footer';
 import { header } from '../components/header';
 
 export const getBookPage: TPageComponent = (params) => {
@@ -43,7 +43,7 @@ export const getBookPage: TPageComponent = (params) => {
 
   if (!footerContainer) {
     footerContainer = document.createElement('footer');
-    footerContainer.innerHTML = footer.render();
+    footerContainer.innerHTML = getFooter();
     appContainer.append(footerContainer);
   }
 };
