@@ -1,0 +1,41 @@
+/* Fonts */
+
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Noto+Sans:wght@400;700&display=swap");
+// font-family: 'Comfortaa', cursive;
+// font-family: 'Noto Sans', sans-serif;
+
+// Size
+
+$font_14: 1.4rem;
+$font_18: 1.8rem;
+$font_24: 2.4rem;
+$font_32: 3.2rem;
+
+$font_regular: 400;
+$font_bold: 700;
+
+/* Colors */
+
+$black: #323232;
+
+$shadow: #a0a9ba;
+
+$gray_dark: #736e73;
+$gray_light: #fafafa;
+
+$white: #ffffff;
+
+$yellow: #ffd86d;
+$yellow_light: #ffeec1;
+$navy: #455d7a;
+$navy_light: #8da8c9;
+$red: #f95959;
+$red_light: #ffd0d0;
+$green: #38cd86;
+$green_dark: #17b86b;
+$green_light: #89f5c1;
+
+/* Transition time */
+
+$tr_time: 200ms;
+$tr_time_2x: 400ms;
