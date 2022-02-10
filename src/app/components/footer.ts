@@ -1,4 +1,4 @@
-import rssLogo from '../../../assets/svg/logo-rss.svg';
+import rssLogo from '../../assets/svg/logo-rss.svg';
 
 export const getFooter = (): string => {
   return `

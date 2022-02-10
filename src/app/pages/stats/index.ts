@@ -1,5 +1,5 @@
 import { TPageComponent } from '../../router';
-import { updatePage } from '../components/page';
+import { updatePage } from '../../components/page';
 
 const pageContent = (): HTMLElement => {
   const node = document.createElement('div');

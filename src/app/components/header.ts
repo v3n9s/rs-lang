@@ -1,4 +1,5 @@
-import { HashPath } from '../../types';
+import { HashPath } from '../types';
+import rsLangLogo from '../../assets/svg/rs-lang-logo.svg';
 
 export const header = {
   render: (): string => {
@@ -9,7 +10,7 @@ export const header = {
             <a class="header__logo-link" href="#/">
               <img
                 class="header__rs-lang-logo"
-                src="./assets/svg/rs-lang-logo.svg"
+                src="${rsLangLogo}"
                 alt="RS-Lang logo"
               />
             </a>

@@ -1,7 +1,7 @@
 import { decrCount, incrCount } from '../../redux/counter';
 import { TPageComponent } from '../../router';
 import { store } from '../../redux/store';
-import { updatePage } from '../components/page';
+import { updatePage } from '../../components/page';
 
 const incrBtnHandler = (element: HTMLElement): void => {
   store.dispatch(incrCount(1));

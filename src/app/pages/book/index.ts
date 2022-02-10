@@ -1,6 +1,6 @@
+import { updatePage } from '../../components/page';
 import { TPageComponent } from '../../router';
 import { HashPath } from '../../types';
-import { updatePage } from '../components/page';
 
 const pageContent = (params: string): HTMLElement => {
   const node = document.createElement('div');
