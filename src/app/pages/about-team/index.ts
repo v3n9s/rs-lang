@@ -1,23 +1,11 @@
 import { TPageComponent } from '../../router';
-import { getFooter } from '../components/footer';
-import { header } from '../components/header';
+import { updatePage } from '../components/page';
 
-export const getAboutTeamPage: TPageComponent = () => {
-  document.title = 'RSLang - О команде';
+const pageContent = (): HTMLElement => {
+  const node = document.createElement('div');
+  node.classList.add('main__container');
 
-  const appContainer = document.querySelector('#app') as HTMLDivElement;
-
-  let headerContainer = document.querySelector('header');
-  let mainContainer = document.querySelector('main');
-  let footerContainer = document.querySelector('footer');
-
-  if (!headerContainer) {
-    headerContainer = document.createElement('header');
-    headerContainer.innerHTML = header.render();
-    appContainer.prepend(headerContainer);
-  }
-
-  const mainContent = `
+  node.innerHTML = `
     <br>
     <br>
     <h1>О команде</h1>
@@ -25,17 +13,10 @@ export const getAboutTeamPage: TPageComponent = () => {
     <br>
     <br>`;
 
-  if (!mainContainer) {
-    mainContainer = document.createElement('main');
-    mainContainer.innerHTML = mainContent;
-    appContainer.append(mainContainer);
-  } else {
-    mainContainer.innerHTML = mainContent;
-  }
+  return node;
+};
 
-  if (!footerContainer) {
-    footerContainer = document.createElement('footer');
-    footerContainer.innerHTML = getFooter();
-    appContainer.append(footerContainer);
-  }
+export const getAboutTeamPage: TPageComponent = () => {
+  const pageTitle = 'RSLang - О команде';
+  updatePage(pageTitle, pageContent());
 };

@@ -40,10 +40,7 @@ const baseConfig = {
       filename: 'index.html',
     }),
     new CopyPlugin({
-      patterns: [
-        { from: './src/assets/fontawesome', to: './assets/fontawesome' },
-        { from: './src/assets/svg', to: './assets/svg' },
-      ],
+      patterns: [{ from: './src/assets/fontawesome', to: './assets/fontawesome' }],
     }),
     new CleanWebpackPlugin(),
   ],

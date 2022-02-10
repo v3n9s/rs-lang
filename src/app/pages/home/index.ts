@@ -1,8 +1,7 @@
 import { decrCount, incrCount } from '../../redux/counter';
 import { TPageComponent } from '../../router';
 import { store } from '../../redux/store';
-import { getFooter } from '../components/footer';
-import { header } from '../components/header';
+import { updatePage } from '../components/page';
 
 const incrBtnHandler = (element: HTMLElement): void => {
   store.dispatch(incrCount(1));
@@ -16,8 +15,9 @@ const decrBtnHandler = (element: HTMLElement): void => {
   element.textContent = `Value: ${value}`;
 };
 
-const createMain = (): HTMLElement => {
-  const node = document.createElement('section');
+const pageContent = (): HTMLElement => {
+  const node = document.createElement('div');
+  node.classList.add('main__container');
 
   let count = store.getState().counter.value;
 
@@ -51,32 +51,6 @@ const createMain = (): HTMLElement => {
 };
 
 export const getHomePage: TPageComponent = () => {
-  document.title = 'RSLang - Главная';
-
-  const appContainer = document.querySelector('#app') as HTMLDivElement;
-
-  let headerContainer = document.querySelector('header');
-  let mainContainer = document.querySelector('main');
-  let footerContainer = document.querySelector('footer');
-
-  if (!headerContainer) {
-    headerContainer = document.createElement('header');
-    headerContainer.innerHTML = header.render();
-    appContainer.prepend(headerContainer);
-  }
-
-  if (!mainContainer) {
-    mainContainer = document.createElement('main');
-    mainContainer.append(createMain());
-    appContainer.append(mainContainer);
-  } else {
-    mainContainer.innerHTML = '';
-    mainContainer.append(createMain());
-  }
-
-  if (!footerContainer) {
-    footerContainer = document.createElement('footer');
-    footerContainer.innerHTML = getFooter();
-    appContainer.append(footerContainer);
-  }
+  const pageTitle = 'RSLang - Главная';
+  updatePage(pageTitle, pageContent());
 };
