@@ -6,6 +6,11 @@
     align-items: center;
   }
 
+  &__rss-logo {
+    padding-top: 5px;
+    width: 60px;
+  }
+
   &__link {
     @include font($font_ui, $font_s, $navy);
     padding: 0 10px;
