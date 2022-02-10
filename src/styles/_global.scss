@@ -23,11 +23,12 @@ body {
 
 .main {
   min-height: calc(100vh - 76px * 2);
+  padding: 20px 0;
 
   &__container {
     margin: 0 auto;
     max-width: $page-width-max;
     height: 600px; // tmp -------------------
-    border: 1px solid magenta; // tmp -------------------
+    background-color: $white; // tmp -------------------
   }
 }
