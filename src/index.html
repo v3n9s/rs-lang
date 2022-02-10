@@ -9,7 +9,46 @@
   <body>
     <div id="app">
       <header class="header">
-        <div class="header__container"></div>
+        <div class="header__container">
+          <div class="header__inner-container">
+            <a class="header__logo-link" href="#/">
+              <img
+                class="header__rs-lang-logo"
+                src="./assets/svg/rs-lang-logo.svg"
+                alt="RS-Lang logo"
+              />
+            </a>
+            <nav class="navigation">
+              <ul class="navigation__container">
+                <li class="menu__item">
+                  <a class="menu__btn menu__btn_active" href="#/">Главная</a>
+                </li>
+                <li class="menu__item">
+                  <a class="menu__btn" href="#/">Учебник</a>
+                </li>
+                <li class="menu__item">
+                  <button class="menu__btn" id="games-list-btn" type="button">
+                    Игры <i class="fa-solid fa-caret-down"></i>
+                  </button>
+                  <div class="games-list">
+                    <a class="games-list__link" href="#/">Аудио вызов</a>
+                    <a class="games-list__link" href="#/">Спринт</a>
+                  </div>
+                </li>
+                <li class="menu__item">
+                  <a class="menu__btn" href="#/">Статистика</a>
+                </li>
+                <li class="menu__item">
+                  <a class="menu__btn" href="#/">О команде</a>
+                </li>
+              </ul>
+            </nav>
+            <button class="sign-in-btn" type="button">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              <span class="sign-in-btn__caption">Вход</span>
+            </button>
+          </div>
+        </div>
       </header>
       <main class="main">
         <div class="main__container"></div>
