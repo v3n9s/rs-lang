@@ -1,15 +1,17 @@
 /* Fonts */
 
+@import url("./assets/fontawesome/css/all.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Noto+Sans:wght@400;700&display=swap");
-// font-family: 'Comfortaa', cursive;
-// font-family: 'Noto Sans', sans-serif;
+
+$font-ui: "Comfortaa", cursive;
+$font-c: "Noto Sans", sans-serif;
 
 // Size
 
-$font_14: 1.4rem;
-$font_18: 1.8rem;
-$font_24: 2.4rem;
-$font_32: 3.2rem;
+$font_s: 1.4rem;
+$font_m: 1.8rem;
+$font_l: 2.4rem;
+$font_xl: 3.2rem;
 
 $font_regular: 400;
 $font_bold: 700;

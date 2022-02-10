@@ -10,10 +10,13 @@ a {
   text-decoration: none;
 }
 
+html {
+  font-family: "Comfortaa", cursive;
+  font-size: 10px;
+}
+
 body {
   background-color: $gray_light;
-  font-family: "Comfortaa", cursive;
-  font-size: 30px;
   overflow-y: scroll;
 }
 
@@ -25,8 +28,7 @@ body {
   &__container {
     margin: 0 auto;
     max-width: 1200px;
-    border: 1px solid magenta; // tmp -------------------
-    height: 100%; // tmp -------------------
+    height: 100%;
   }
 }
 
@@ -36,7 +38,7 @@ body {
   &__container {
     margin: 0 auto;
     max-width: 1200px;
-    height: 900px; // tmp -------------------
+    height: 600px; // tmp -------------------
     border: 1px solid magenta; // tmp -------------------
   }
 }
