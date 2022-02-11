@@ -12,6 +12,7 @@ export function createNavigation(rootElement: HTMLElement) {
       <span>Выйти<span>`;
       button.addEventListener('click', () => {
         store.dispatch(removeUser());
+        console.log("EXIT!!!!")
         document.location.reload();
       });
     } else if (store.getState().user.token === null) {
@@ -79,7 +80,7 @@ export function createNavigation(rootElement: HTMLElement) {
           const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
           document.body.removeChild(modal);
           showMessage('Вы успешно вошли в аккаунт!');
-          store.dispatch(updateUser(user)); 
+          store.dispatch(updateUser(user));
           document.location.reload();
         })
           .catch((error: Error) => {
@@ -129,6 +130,7 @@ export function createNavigation(rootElement: HTMLElement) {
           const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
           document.body.removeChild(modal);
           showMessage('Регистрация прошла успешно! Пожалуйста войдите в аккаунт!');
+          document.location.reload();
         })
           .catch((error: Error) => {
             showMessage('Ошибка! Повторите попытку регистрации');
@@ -139,9 +141,9 @@ export function createNavigation(rootElement: HTMLElement) {
         infoMessage.className = 'info';
         infoMessage.innerHTML = mess;
         document.body.appendChild(infoMessage);
-        function hideDiv() {
-          infoMessage.style.display = 'none';
+        function removeDiv() {
+            document.body.removeChild(infoMessage);
         }
-        setTimeout(hideDiv, 2000);
+        setTimeout(removeDiv, 2000);
       }
 }

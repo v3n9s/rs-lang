@@ -26,9 +26,11 @@
   font-family: $font-ui;
   @include shadow;
   input {
-    border-top: 1px solid $gray_dark;
-    border-left: 1px solid $gray_dark;
-    border-right: 1px solid $gray_dark;
+    border-top: 1px solid $gray_light;
+    border-left: 1px solid $gray_light;
+    border-right: 1px solid $gray_light;
+    border-radius: 3px;
+    @include shadow;
 }
     p {
         font-style: $font-c;
@@ -39,7 +41,7 @@
   }
   .mui-btn{
     background-color: $gray_light;
-    border: 2px solid $black;
+    border: 1px solid $black;
     color: $navy;
     font-family: $font-ui;
     border-radius: 5px;
