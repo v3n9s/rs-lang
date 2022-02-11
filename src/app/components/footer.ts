@@ -7,6 +7,8 @@ export const getFooter = (): string => {
         <a class="footer__link" href="https://rs.school/js/">
           <img
             class="footer__rss-logo"
+            width="60"
+            height="60"
             src="${rssLogo}"
             alt="Rolling Scopes School logo"
           />
