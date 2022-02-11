@@ -1,1 +1,9 @@
+@import "./styles/style-reset";
+@import "./styles/variables";
+@import "./styles/mixin";
 @import "./styles/global";
+
+@import "./styles/components/header";
+@import "./styles/components/footer";
+
+@import "./styles/pages/not-found.scss";

@@ -1,0 +1,119 @@
+.header {
+  &__inner-container {
+    height: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo-link {
+    height: 60px;
+  }
+
+  &__rs-lang-logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.navigation {
+  display: flex;
+
+  &__container {
+    display: flex;
+    margin-left: 20px;
+  }
+}
+
+.menu {
+  &__item {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &__btn {
+    @include font($font_ui, $font_m, $navy, 100%, $font_bold);
+    background-color: $white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: $tr_time;
+  }
+
+  &__btn:hover {
+    background-color: $yellow_light;
+    color: $black;
+  }
+
+  &__btn:active {
+    background-color: $yellow;
+    color: $black;
+  }
+}
+
+.sign-in-btn {
+  @include font($font_ui, $font_m, $navy, 100%, $font_bold);
+  padding: 12px 20px;
+  border-radius: 10px;
+  transition: $tr_time;
+  cursor: pointer;
+
+  &__caption {
+    margin-left: 8px;
+  }
+
+  &_authorized {
+    background-color: $green_light;
+  }
+}
+
+.sign-in-btn:hover {
+  background-color: $yellow_light;
+  color: $black;
+}
+
+.sign-in-btn:active {
+  background-color: $yellow;
+  color: $black;
+}
+
+.games-list {
+  @include shadow;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50px;
+  background-color: $white;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  transition: $tr_time ease-out;
+
+  &__link {
+    @include font($font_ui, $font_m, $navy, 100%);
+    border-radius: 5px;
+    white-space: nowrap;
+    padding: 12px 20px;
+    transition: $tr_time ease-out;
+  }
+
+  &__link:hover {
+    background-color: $yellow_light;
+    color: $black;
+  }
+
+  &__link:active {
+    background-color: $yellow;
+    color: $black;
+  }
+}
+
+.games-list:hover,
+#games-list-btn:hover + .games-list {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+}

@@ -1,5 +1,4 @@
 import { TPageComponent } from '../../router';
-import { HashPath } from '../../types';
 
 export const getSprintPage: TPageComponent = () => {
   document.title = 'RSLang - Спринт';
@@ -19,7 +18,7 @@ export const getSprintPage: TPageComponent = () => {
   }
 
   const mainContent = `
-    <a href="${HashPath.homePage}">| home |</a>
+    <button id="sprint-back-btn" type=button>| \< back |</button>
     <br>
     <br>
     <h1>Спринт</h1>
@@ -34,4 +33,9 @@ export const getSprintPage: TPageComponent = () => {
   } else {
     mainContainer.innerHTML = mainContent;
   }
+
+  const backButton = mainContainer.querySelector('#sprint-back-btn') as HTMLButtonElement;
+  backButton.addEventListener('click', () => {
+    history.back();
+  });
 };

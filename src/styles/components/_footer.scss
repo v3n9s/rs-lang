@@ -1,0 +1,44 @@
+.footer {
+  &__inner-container {
+    height: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__rss-logo {
+    padding-top: 5px;
+    width: 60px;
+  }
+
+  &__link {
+    @include font($font_ui, $font_s, $navy);
+    padding: 0 10px;
+    filter: opacity(0.5);
+    transition: filter $tr_time ease-out;
+  }
+
+  &__link:hover {
+    filter: opacity(1);
+    color: $black;
+  }
+
+  &__links-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__year {
+    @include font($font_ui, $font_m, $navy);
+    padding-right: 10px;
+    filter: opacity(0.5);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .footer {
+    &__links-container {
+      flex-direction: column;
+    }
+  }
+}

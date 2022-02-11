@@ -1,5 +1,4 @@
 import { TPageComponent } from '../../router';
-import { HashPath } from '../../types';
 
 export const getAudioCallPage: TPageComponent = () => {
   document.title = 'RSLang - Аудио вызов';
@@ -19,7 +18,7 @@ export const getAudioCallPage: TPageComponent = () => {
   }
 
   const mainContent = `
-   <a href="${HashPath.homePage}">| home |</a>
+    <button id="audiocall-back-btn" type=button>| \< back |</button>
     <br>
     <br>
     <h1>Аудио вызов</h1>
@@ -34,4 +33,9 @@ export const getAudioCallPage: TPageComponent = () => {
   } else {
     mainContainer.innerHTML = mainContent;
   }
+
+  const backButton = mainContainer.querySelector('#audiocall-back-btn') as HTMLButtonElement;
+  backButton.addEventListener('click', () => {
+    history.back();
+  });
 };
