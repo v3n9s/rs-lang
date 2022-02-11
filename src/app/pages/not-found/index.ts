@@ -15,6 +15,6 @@ const pageContent = (): HTMLElement => {
 };
 
 export const getNotFoundPage: TPageComponent = () => {
-  const pageTitle = 'RSLang - Page not found';
+  const pageTitle = 'RSLang - Страница не найдена';
   updatePage(pageTitle, pageContent());
 };
