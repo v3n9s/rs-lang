@@ -11,3 +11,7 @@
   line-height: $font-line;
   font-weight: $font-weight;
 }
+
+@mixin shadow {
+  box-shadow: 1px 1px 4px $shadow_clr;
+}
