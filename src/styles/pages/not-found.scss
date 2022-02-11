@@ -1,0 +1,17 @@
+.not-found {
+  padding: 150px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $white;
+  border-radius: 10px;
+
+  &__caption {
+    @include font($font_ui, 56px, $navy, 150%, $font_bold);
+  }
+
+  &__text {
+    @include font($font_ui, 32px, $navy, 150%);
+  }
+}

@@ -3,5 +3,7 @@
 @import "./styles/mixin";
 @import "./styles/global";
 
-@import "./styles/components/header/header";
-@import "./styles/components/footer/footer";
+@import "./styles/components/header";
+@import "./styles/components/footer";
+
+@import "./styles/pages/not-found.scss";
