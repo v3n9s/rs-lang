@@ -1,9 +1,14 @@
 import { HashPath } from '../types';
 import rsLangLogo from '../../assets/svg/rs-lang-logo.svg';
+import { createNavigation } from './navigation';
+import { doc } from 'prettier';
 
 export const header = {
-  render: (): string => {
-    return `
+  render: (): HTMLElement => {
+    const headerContainer = document.createElement('div');
+    headerContainer.className = 'header__container';
+    headerContainer.innerHTML =
+      `
       <div class="header__container">
         <div class="header__inner-container">
           <nav class="navigation">
@@ -46,5 +51,8 @@ export const header = {
           </button>
         </div>
       </div>`;
+    createNavigation(headerContainer);
+    return headerContainer;
   },
+
 };
