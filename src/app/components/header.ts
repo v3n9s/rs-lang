@@ -10,6 +10,8 @@ export const header = {
             <a class="header__logo-link" href="#/">
               <img
                 class="header__rs-lang-logo"
+                width="60"
+                height="60"
                 src="${rsLangLogo}"
                 alt="RS-Lang logo"
               />
