@@ -4,17 +4,21 @@ import { createUser } from '../api/create-new-user';
 import { ILoginedUser, loginUser } from '../api/sign-in';
 
 export function createNavigation(rootElement: HTMLElement) {
-    const button = rootElement.querySelector('.sign-in-btn__caption')!
+    const button = rootElement.querySelector('#auth-btn')!
     if (store.getState().user.token !== null) {
       button.id = 'logout';
-      button.innerHTML = "Выйти";
+      button.innerHTML = `
+      <i class="fa-solid fa-right-to-bracket"></i>
+      <span>Выйти<span>`;
       button.addEventListener('click', () => {
         store.dispatch(removeUser());
         document.location.reload();
       });
     } else if (store.getState().user.token === null) {
       button.id = 'login';
-      button.innerHTML = "Войти";
+      button.innerHTML = `
+      <i class="fa-solid fa-right-to-bracket"></i>
+      <span>Войти<span>`;
       button.addEventListener('click', openAuthModal);
     }
     function openAuthModal() {
@@ -36,11 +40,15 @@ export function createNavigation(rootElement: HTMLElement) {
         form.innerHTML = `
         <span class="close">&times;</span>
         <h1>Вход в аккаунт</h1>
+        <p>Электронная почта:</p>
         <div class="mui-textfield mui-textfield--float-label">
+        
         <input type="email" id="email" required>
         <label for="email">Email</label>
         </div>
+        <p>Пароль:</p>
         <div class="mui-textfield mui-textfield--float-label">
+        
         <input type="password" id="password" minlength="8" required>
         <label for="password">Пароль</label>
         </div>
@@ -85,15 +93,21 @@ export function createNavigation(rootElement: HTMLElement) {
         form.innerHTML = `
          <h1>Регистрация</h1>
          <form class="mui-form" id="register-form">
+         <p>Имя:</p>
          <div class="mui-textfield mui-textfield--float-label">
+         
          <input type="text" id="name" required>
          <label for="name">Name</label>
          </div>
+         <p>Электронная почта:</p>
          <div class="mui-textfield mui-textfield--float-label">
+         
          <input type="email" id="email" required>
          <label for="email">Email</label>
          </div>
+         <p>Пароль:</p>
          <div class="mui-textfield mui-textfield--float-label">
+        
          <input type="password" id="password" minlength="8" required>
          <label for="password">Пароль</label>
          </div>
