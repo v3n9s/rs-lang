@@ -6,3 +6,13 @@ export enum HashPath {
   statsPage = '#/stats',
   aboutTeamPage = '#/about-team',
 }
+
+export enum BookParam {
+  Group = 'group',
+  Page = 'page',
+}
+
+export interface IBookNav {
+  group: number;
+  page: number;
+}
