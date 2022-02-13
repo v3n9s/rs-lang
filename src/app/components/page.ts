@@ -12,7 +12,7 @@ export const updatePage = (pageTitle: string, pageContent: HTMLElement): void =>
   if (!headerContainer) {
     headerContainer = document.createElement('header');
     headerContainer.classList.add('header');
-    headerContainer.innerHTML = header.render();
+    headerContainer.appendChild(header.render());
     appContainer.prepend(headerContainer);
   }
 
