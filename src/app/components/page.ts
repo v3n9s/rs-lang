@@ -5,9 +5,14 @@ export const updatePage = (pageTitle: string, pageContent: HTMLElement): void =>
   document.title = pageTitle;
 
   const appContainer = document.querySelector('#app') as HTMLDivElement;
-  let headerContainer = document.querySelector('header');
-  let mainContainer = document.querySelector('main');
-  let footerContainer = document.querySelector('footer');
+  let headerContainer = document.querySelector('.header');
+  let mainContainer = document.querySelector('.main');
+  let footerContainer = document.querySelector('.footer');
+
+  let gameSection = document.querySelector('.game') as HTMLElement | null;
+  if (gameSection) {
+    gameSection.remove();
+  }
 
   if (!headerContainer) {
     headerContainer = document.createElement('header');
