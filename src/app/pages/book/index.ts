@@ -68,8 +68,9 @@ const pageContent = (params: IBookNav): HTMLElement => {
       </li>
       <br>
       <li>
-        <a href="">
-          Вызов игры Спринт с параметрами
+        <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}"
+          style="pointer-events: none;">
+          Вызов игры Спринт с параметрами [линк выключен для вученной страницы]
         </a>
       </li>
     </ol>
