@@ -4,7 +4,7 @@ import { BookParam, HashPath, IBookNav } from '../../types';
 
 const pageContent = (params: IBookNav): HTMLElement => {
   const node = document.createElement('div');
-  node.classList.add('main__container');
+  node.className = 'main__container';
 
   const { group, page } = params;
   console.log('parse >', group, page);
