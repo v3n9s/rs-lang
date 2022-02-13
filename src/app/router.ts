@@ -6,10 +6,8 @@ import { getBookPage } from './pages/book';
 import { getHomePage } from './pages/home';
 import { getNotFoundPage } from './pages/not-found';
 import { getStatsPage } from './pages/stats';
-import { store } from './redux/store';
-import { resetGameInitData, updateGameInitData } from './redux/game-init-data';
 
-export type TPageComponent = (params: string) => void;
+export type TPageComponent = (params: IBookNav) => void;
 
 interface IHashPathComponent {
   hashPath: string;
@@ -25,8 +23,8 @@ interface ILocationParams {
 export const routes: Array<IHashPathComponent> = [
   { hashPath: HashPath.homePage, componentFunc: getHomePage, hasParams: false },
   { hashPath: HashPath.bookPage, componentFunc: getBookPage, hasParams: true },
-  { hashPath: HashPath.audioCallPage, componentFunc: getAudioCallPage, hasParams: false },
-  { hashPath: HashPath.sprintPage, componentFunc: getSprintPage, hasParams: false },
+  { hashPath: HashPath.audioCallPage, componentFunc: getAudioCallPage, hasParams: true },
+  { hashPath: HashPath.sprintPage, componentFunc: getSprintPage, hasParams: true },
   { hashPath: HashPath.statsPage, componentFunc: getStatsPage, hasParams: false },
   { hashPath: HashPath.aboutTeamPage, componentFunc: getAboutTeamPage, hasParams: false },
 ];
@@ -100,43 +98,40 @@ export function isValidParams(params: string): boolean {
   return false;
 }
 
-function parseValidParams(params: string): IBookNav {
+export function parseValidParams(params: string): IBookNav {
+  if (params === '') {
+    return {
+      group: -1,
+      page: -1,
+    };
+  }
   const url = new URL('http://localhost:5000/');
   url.search = params;
-
   const group = Number(url.searchParams.get(BookParam.Group) as string);
   const page = Number(url.searchParams.get(BookParam.Page) as string);
-
   return {
     group,
     page,
   };
 }
 
+const defaultBookLocation: IBookNav = { group: -1, page: -1 };
+
 export function router(): void {
   const { hashPath, searchParams } = parseLocation(location);
   const hashPathComponent = findComponentByPath(hashPath, routes);
 
-  if (hashPath !== HashPath.audioCallPage && hashPath !== HashPath.sprintPage) {
-    store.dispatch(resetGameInitData());
-  }
-
   if (hashPathComponent) {
     if (hashPathComponent.hasParams && isValidParams(searchParams)) {
-      if (searchParams) {
-        store.dispatch(updateGameInitData(parseValidParams(searchParams)));
-      } else {
-        store.dispatch(resetGameInitData());
-      }
-      hashPathComponent.componentFunc(searchParams);
+      hashPathComponent.componentFunc(parseValidParams(searchParams));
     } else {
       if (searchParams) {
-        getNotFoundPage(searchParams);
+        getNotFoundPage(defaultBookLocation);
       } else {
-        hashPathComponent.componentFunc(searchParams);
+        hashPathComponent.componentFunc(defaultBookLocation);
       }
     }
   } else {
-    getNotFoundPage(searchParams);
+    getNotFoundPage(defaultBookLocation);
   }
 }

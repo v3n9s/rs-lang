@@ -1,8 +1,7 @@
-import { store } from '../../redux/store';
 import { TPageComponent } from '../../router';
 import { BookParam, HashPath } from '../../types';
 
-export const getAudioCallPage: TPageComponent = () => {
+export const getAudioCallPage: TPageComponent = (params) => {
   document.title = 'RSLang - Аудио вызов';
 
   const appContainer = document.querySelector('#app') as HTMLDivElement;
@@ -10,8 +9,16 @@ export const getAudioCallPage: TPageComponent = () => {
   const gameNode = document.createElement('section');
   gameNode.className = 'game';
 
-  const group = store.getState().gameInitData.group;
-  const page = store.getState().gameInitData.page;
+  const { group, page } = params;
+  console.log('parse >', group, page);
+
+  if (group === -1) {
+    // запускаем с выбора уровня сложности
+    console.log('Выбор уровня сложности');
+  } else {
+    // запускаем с параметрами
+    console.log('Игра запушена для G:', group, ', P: ', page);
+  }
 
   gameNode.innerHTML = `
     <button 
@@ -112,12 +119,15 @@ export const getAudioCallPage: TPageComponent = () => {
   const backButton = gameNode.querySelector('#audiocall-back-btn') as HTMLButtonElement;
   backButton.addEventListener('click', () => {
     gameNode.remove();
+
     const loc = new URL(location.toString());
-    if (store.getState().gameInitData.group === -1) {
+
+    if (group === -1) {
       loc.hash = HashPath.bookPage;
     } else {
       loc.hash = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}`;
     }
+
     location.assign(loc);
   });
 
