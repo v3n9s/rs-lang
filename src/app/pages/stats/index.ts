@@ -3,7 +3,7 @@ import { updatePage } from '../../components/page';
 
 const pageContent = (): HTMLElement => {
   const node = document.createElement('div');
-  node.classList.add('main__container');
+  node.className = 'main__container';
 
   node.innerHTML = `
     <br>

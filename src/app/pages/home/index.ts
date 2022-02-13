@@ -4,7 +4,7 @@ import rsLangLogo from '../../../assets/svg/rs-lang-logo.svg';
 
 const pageContent = (): HTMLElement => {
   const node = document.createElement('div');
-  node.classList.add('main__container');
+  node.className = 'main__container';
 
   node.innerHTML = `
     <section class="home">

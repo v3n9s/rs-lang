@@ -3,7 +3,7 @@ import { TPageComponent } from '../../router';
 
 const pageContent = (): HTMLElement => {
   const node = document.createElement('div');
-  node.classList.add('main__container');
+  node.className = 'main__container';
 
   node.innerHTML = `
     <div class="not-found">

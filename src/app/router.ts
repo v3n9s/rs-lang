@@ -1,13 +1,13 @@
 import { getAudioCallPage } from './pages/game-audio-call';
 import { getSprintPage } from './pages/game-sprint';
-import { HashPath } from './types';
+import { BookParam, HashPath, IBookNav } from './types';
 import { getAboutTeamPage } from './pages/about-team';
 import { getBookPage } from './pages/book';
 import { getHomePage } from './pages/home';
 import { getNotFoundPage } from './pages/not-found';
 import { getStatsPage } from './pages/stats';
 
-export type TPageComponent = (params: string) => void;
+export type TPageComponent = (params: IBookNav) => void;
 
 interface IHashPathComponent {
   hashPath: string;
@@ -23,8 +23,8 @@ interface ILocationParams {
 export const routes: Array<IHashPathComponent> = [
   { hashPath: HashPath.homePage, componentFunc: getHomePage, hasParams: false },
   { hashPath: HashPath.bookPage, componentFunc: getBookPage, hasParams: true },
-  { hashPath: HashPath.audioCallPage, componentFunc: getAudioCallPage, hasParams: false },
-  { hashPath: HashPath.sprintPage, componentFunc: getSprintPage, hasParams: false },
+  { hashPath: HashPath.audioCallPage, componentFunc: getAudioCallPage, hasParams: true },
+  { hashPath: HashPath.sprintPage, componentFunc: getSprintPage, hasParams: true },
   { hashPath: HashPath.statsPage, componentFunc: getStatsPage, hasParams: false },
   { hashPath: HashPath.aboutTeamPage, componentFunc: getAboutTeamPage, hasParams: false },
 ];
@@ -71,21 +71,67 @@ export function findComponentByPath(
   return componentFunc;
 }
 
+export function isValidParams(params: string): boolean {
+  const url = new URL('http://localhost:5000/');
+  url.search = params;
+
+  if (params === '') {
+    return true;
+  }
+
+  const group = url.searchParams.get(BookParam.Group);
+  const page = url.searchParams.get(BookParam.Page);
+
+  if (group && page) {
+    const groupNum = +group;
+    const pageNum = +page;
+
+    if (Number.isInteger(groupNum) && Number.isInteger(pageNum)) {
+      if (groupNum >= 0 && groupNum <= 5 && pageNum >= 0 && pageNum <= 29) {
+        return true;
+      }
+      if (groupNum === 6 && pageNum === 0) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+export function parseValidParams(params: string): IBookNav {
+  if (params === '') {
+    return {
+      group: -1,
+      page: -1,
+    };
+  }
+  const url = new URL('http://localhost:5000/');
+  url.search = params;
+  const group = Number(url.searchParams.get(BookParam.Group) as string);
+  const page = Number(url.searchParams.get(BookParam.Page) as string);
+  return {
+    group,
+    page,
+  };
+}
+
+const defaultBookLocation: IBookNav = { group: -1, page: -1 };
+
 export function router(): void {
   const { hashPath, searchParams } = parseLocation(location);
   const hashPathComponent = findComponentByPath(hashPath, routes);
 
   if (hashPathComponent) {
-    if (hashPathComponent.hasParams) {
-      hashPathComponent.componentFunc(searchParams);
+    if (hashPathComponent.hasParams && isValidParams(searchParams)) {
+      hashPathComponent.componentFunc(parseValidParams(searchParams));
     } else {
       if (searchParams) {
-        getNotFoundPage(location.toString());
+        getNotFoundPage(defaultBookLocation);
       } else {
-        hashPathComponent.componentFunc(searchParams);
+        hashPathComponent.componentFunc(defaultBookLocation);
       }
     }
   } else {
-    getNotFoundPage(location.toString());
+    getNotFoundPage(defaultBookLocation);
   }
 }
