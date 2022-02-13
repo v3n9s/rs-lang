@@ -18,7 +18,7 @@ export const getFooter = (): string => {
             <i class="fab fa-github"></i> Вероника
           </a>
           <a class="footer__link" href="https://github.com/v3n9s">
-            <i class="fab fa-github"></i> Веньямин
+            <i class="fab fa-github"></i> Вениамин
           </a>
           <a class="footer__link" href="https://github.com/khoncharov">
             <i class="fab fa-github"></i> Константин
