@@ -1,5 +1,5 @@
 import { getFooter } from './footer';
-import { header } from './header';
+import { getHeaderNode } from './header';
 
 export const updatePage = (pageTitle: string, pageContent: HTMLElement): void => {
   document.title = pageTitle;
@@ -17,7 +17,7 @@ export const updatePage = (pageTitle: string, pageContent: HTMLElement): void =>
   if (!headerContainer) {
     headerContainer = document.createElement('header');
     headerContainer.className = 'header';
-    headerContainer.appendChild(header.render());
+    headerContainer.appendChild(getHeaderNode());
     appContainer.prepend(headerContainer);
   }
 

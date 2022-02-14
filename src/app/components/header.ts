@@ -1,12 +1,11 @@
 import { HashPath } from '../types';
 import rsLangLogo from '../../assets/svg/rs-lang-logo.svg';
-import { createAuthButton } from './authorization';
+import { authButtonHandler } from './authorization';
 
-export const header = {
-  render: (): HTMLElement => {
-    const headerContainer = document.createElement('div');
-    headerContainer.className = 'header__container';
-    headerContainer.innerHTML = `
+export const getHeaderNode = (): HTMLElement => {
+  const headerContainer = document.createElement('div');
+  headerContainer.className = 'header__container';
+  headerContainer.innerHTML = `
       <div class="header__container">
         <div class="header__inner-container">
           <nav class="navigation">
@@ -49,7 +48,6 @@ export const header = {
           </button>
         </div>
       </div>`;
-    createAuthButton(headerContainer);
-    return headerContainer;
-  },
+  authButtonHandler(headerContainer);
+  return headerContainer;
 };

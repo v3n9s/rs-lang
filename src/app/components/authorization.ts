@@ -3,152 +3,198 @@ import { removeUser, updateUser } from '../redux/user';
 import { createUser } from '../api/create-new-user';
 import { ILoginedUser, loginUser } from '../api/sign-in';
 
-function showMessage(mess: string) {
-  const infoMessage = document.createElement('div');
-  infoMessage.className = 'info';
-  infoMessage.innerHTML = mess;
-  document.body.appendChild(infoMessage);
-  function removeDiv() {
-    document.body.removeChild(infoMessage);
+function showLoader(show: Boolean): void {
+  const loader = document.querySelector('.login-loader') as HTMLDivElement;
+  if (show) {
+    loader.classList.remove('login-loader_hidden');
+  } else {
+    loader.classList.add('login-loader_hidden');
   }
-  setTimeout(removeDiv, 2000);
 }
 
-async function registerFormHandler(this: HTMLFormElement, event: Event) {
-  event.preventDefault();
-  const targetElement = event.target as HTMLElement;
-  const email = (targetElement.querySelector('#email')! as HTMLInputElement).value;
-  const password = (targetElement.querySelector('#password') as HTMLInputElement).value;
-  const name = (targetElement.querySelector('#name') as HTMLInputElement).value;
-  createUser({ email: email, password: password, name: name })
-    .then(() => {
-      const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
-      document.body.removeChild(modal);
-      showMessage('Регистрация прошла успешно! Пожалуйста войдите в аккаунт!');
-      document.location.reload();
-    })
-    .catch(() => {
-      showMessage('Ошибка! Повторите попытку регистрации');
-    });
+function showMessage(msg: string): void {
+  const infoMessage = document.createElement('div');
+  infoMessage.className = 'info';
+  infoMessage.innerHTML = msg;
+  document.body.appendChild(infoMessage);
+  setTimeout(() => {
+    infoMessage.remove();
+  }, 3000);
+}
+
+function updateAuthButton(authBtn: HTMLButtonElement): void {
+  if (store.getState().user.token) {
+    authBtn.classList.add('sign-in-btn_authorized');
+    authBtn.innerHTML = `
+      <i class="fas fa-sign-out"></i>
+      <span class="sign-in-btn__caption">Выйти<span>`;
+  } else {
+    authBtn.classList.remove('sign-in-btn_authorized');
+    authBtn.innerHTML = `
+    <i class="fas fa-sign-in"></i>
+    <span class="sign-in-btn__caption">Войти<span>`;
+  }
+}
+
+async function registerFormHandler(form: HTMLFormElement): Promise<void> {
+  const email = (form.querySelector('#email') as HTMLInputElement).value;
+  const password = (form.querySelector('#password') as HTMLInputElement).value;
+  const name = (form.querySelector('#name') as HTMLInputElement).value;
+
+  if (!name || !password || !name) {
+    showMessage('Не введены имя, email или пароль.');
+  } else {
+    try {
+      showLoader(true);
+      const res = await createUser({ email: email, password: password, name: name });
+      showLoader(false);
+      switch (res.status) {
+        case 200:
+          const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
+          modal.remove();
+          showMessage(res.message);
+          break;
+        case 417:
+          showMessage(res.message);
+          break;
+        case 422:
+          showMessage(res.message);
+          break;
+        case 0:
+          showMessage(res.message);
+          break;
+        default:
+          showMessage('Неизвестная ошибка');
+          break;
+      }
+    } catch {
+      showMessage('Неизвестная ошибка');
+    }
+  }
 }
 
 function openRegisterForm() {
   const form = document.createElement('form');
   form.className = 'mui-form';
-  form.id = 'auth-form';
+  form.id = 'register-form';
   form.innerHTML = `
-       <h1>Регистрация</h1>
-       <form class="mui-form" id="register-form">
-       <p>Имя:</p>
-       <div class="mui-textfield mui-textfield--float-label">
-       
-       <input type="text" id="name" required>
-       <label for="name">Name</label>
-       </div>
-       <p>Электронная почта:</p>
-       <div class="mui-textfield mui-textfield--float-label">
-       
-       <input type="email" id="email" required>
-       <label for="email">Email</label>
-       </div>
-       <p>Пароль:</p>
-       <div class="mui-textfield mui-textfield--float-label">
-      
-       <input type="password" id="password" minlength="8" required>
-       <label for="password">Пароль</label>
-       </div>
-       <button type="submit" id="register" class="mui-btn mui-btn--raiswd mui-btn--primary">
-       Зарегистрироваться
-       </button>
-       `;
-  form.addEventListener('submit', registerFormHandler, { once: true });
+    <span class="mui-form__close-btn"><i class="fa-regular fa-circle-xmark"></i></span>
+    <h2 class="mui-form__caption">Регистрация</h2>
+    <p class="mui-form__label-text">Имя:</p>
+    <input class="mui-form__input" type="text" id="name" required />
+    <p class="mui-form__label-text">Электронная почта:</p>
+    <input class="mui-form__input" type="email" id="email" required />
+    <p class="mui-form__label-text">Пароль:</p>
+    <input class="mui-form__input" type="password" id="password" minlength="8" required />
+    <div class="mui-form__inner-container">
+      <button class="mui-form__btn" type="button" id="reg-form-btn">Зарегистрироваться</button>
+      <div class="login-loader login-loader_hidden"></div>
+    </div>`;
+
+  const closeBtn = form.querySelector('.mui-form__close-btn') as HTMLElement;
+  closeBtn.addEventListener('click', () => {
+    form.remove();
+    (document.querySelector('#modal-wrapper') as HTMLDivElement).remove();
+  });
+
+  const regBtn = form.querySelector('#reg-form-btn') as HTMLButtonElement;
+  regBtn.addEventListener('click', () => {
+    registerFormHandler(form);
+  });
+
   return form;
 }
 
-async function loginFormHandler(this: HTMLFormElement, event: Event) {
-  event.preventDefault();
-  const targetElement = event.target as HTMLElement;
-  const email = (targetElement.querySelector('#email')! as HTMLInputElement).value;
-  const password = (targetElement.querySelector('#password') as HTMLInputElement).value;
+async function loginFormHandler(form: HTMLFormElement): Promise<void> {
+  const email = (form.querySelector('#email') as HTMLInputElement).value;
+  const password = (form.querySelector('#password') as HTMLInputElement).value;
 
-  loginUser({ email: email, password: password })
-    .then((user: ILoginedUser) => {
-      const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
-      document.body.removeChild(modal);
-      showMessage('Вы успешно вошли в аккаунт!');
-      store.dispatch(updateUser(user));
-      document.location.reload();
-    })
-    .catch(() => {
-      showMessage('Ошибка! Неправильный пароль или имя пользователя!');
-    });
+  if (!email || !password) {
+    showMessage('Не введён email и/или пароль.');
+  } else {
+    try {
+      showLoader(true);
+      const res = await loginUser({ email: email, password: password });
+      showLoader(false);
+      switch (res.status) {
+        case 200:
+          store.dispatch(updateUser(res.payload as ILoginedUser));
+
+          const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
+          modal.remove();
+
+          showMessage(res.message);
+          const authBtn = document.querySelector('#auth-btn') as HTMLButtonElement;
+          updateAuthButton(authBtn);
+          break;
+        case 403:
+          showMessage(res.message);
+          break;
+        case 0:
+          showMessage(res.message);
+          break;
+        default:
+          showMessage('Неизвестная ошибка');
+          break;
+      }
+    } catch {
+      showMessage('Неизвестная ошибка');
+    }
+  }
 }
 
-function openAuthModal(modalWrapper: HTMLDivElement) {
-  const register = document.createElement('button');
-  register.innerHTML = 'Регистрация';
-  register.id = 'register';
-  register.classList.add('mui-btn', 'mui-btn--raiswd', 'mui-btn--primary');
-  register.addEventListener('click', () => {
-    modalWrapper.innerHTML = '';
-    modalWrapper.appendChild(openRegisterForm());
-  });
+function openAuthModal(): void {
+  const modalWrapper = document.createElement('div');
+  modalWrapper.id = 'modal-wrapper';
+  modalWrapper.className = 'modal';
 
   const form = document.createElement('form');
   form.className = 'mui-form';
   form.id = 'auth-form';
   form.innerHTML = `
-      <span class="close">&times;</span>
-      <h1>Вход в аккаунт</h1>
-      <p>Электронная почта:</p>
-      <div class="mui-textfield mui-textfield--float-label">
-      
-      <input type="email" id="email" required>
-      <label for="email">Email</label>
-      </div>
-      <p>Пароль:</p>
-      <div class="mui-textfield mui-textfield--float-label">
-      
-      <input type="password" id="password" minlength="8" required>
-      <label for="password">Пароль</label>
-      </div>
-      <button type="submit" class="mui-btn mui-btn--raiswd mui-btn--primary">
-      Войти
-      </button>   
-      `;
-  form.appendChild(register);
+    <span class="mui-form__close-btn"><i class="fa-regular fa-circle-xmark"></i></span>
+    <h2 class="mui-form__caption">Вход</h2>
+    <p class="mui-form__label-text">Электронная почта:</p>
+    <input class="mui-form__input" type="email" id="email" required />
+    <p class="mui-form__label-text">Пароль:</p>
+    <input class="mui-form__input" type="password" id="password" minlength="8" required />
+    <div class="mui-form__inner-container">
+      <button class="mui-form__btn" type="button" id="log-in-btn">Войти</button>
+      <div class="login-loader login-loader_hidden"></div>
+      <button class="mui-form__btn" type="button" id="open-reg-form-btn">Регистрация</button>
+    </div>`;
+
+  const regBtn = form.querySelector('#open-reg-form-btn') as HTMLButtonElement;
+  regBtn.addEventListener('click', () => {
+    modalWrapper.innerHTML = '';
+    modalWrapper.appendChild(openRegisterForm());
+  });
+
+  const closeBtn = form.querySelector('.mui-form__close-btn') as HTMLElement;
+  closeBtn.addEventListener('click', () => {
+    form.remove();
+    modalWrapper.remove();
+  });
+
+  const signInBtn = form.querySelector('#log-in-btn') as HTMLButtonElement;
+  signInBtn.addEventListener('click', () => {
+    loginFormHandler(form);
+  });
+
   modalWrapper.appendChild(form);
   document.body.appendChild(modalWrapper);
-  const close = modalWrapper.getElementsByClassName('close')[0];
-  close.addEventListener('click', () => document.body.removeChild(modalWrapper));
-  window.onclick = function (event) {
-    if (event.target == modalWrapper) {
-      document.body.removeChild(modalWrapper);
-    }
-  };
-  form.addEventListener('submit', loginFormHandler, { once: true });
 }
 
-export function createAuthButton(rootElement: HTMLElement) {
-  const modalWrapper = document.createElement('div');
-  modalWrapper.id = 'modal-wrapper';
-  modalWrapper.className = 'modal';
+export function authButtonHandler(node: HTMLElement): void {
+  const authBtn = node.querySelector('#auth-btn') as HTMLButtonElement;
+  updateAuthButton(authBtn);
 
-  const buttonAuth = rootElement.querySelector('#auth-btn')!;
-  if (store.getState().user.token !== null) {
-    buttonAuth.id = 'logout';
-    buttonAuth.innerHTML = `
-      <i class="fa-solid fa-right-to-bracket"></i>
-      <span>Выйти<span>`;
-    buttonAuth.addEventListener('click', () => {
+  authBtn.addEventListener('click', () => {
+    if (store.getState().user.token) {
       store.dispatch(removeUser());
-      document.location.reload();
-    });
-  } else if (store.getState().user.token === null) {
-    buttonAuth.id = 'login';
-    buttonAuth.innerHTML = `
-      <i class="fa-solid fa-right-to-bracket"></i>
-      <span>Войти<span>`;
-    buttonAuth.addEventListener('click', () => openAuthModal(modalWrapper));
-  }
+      updateAuthButton(authBtn);
+    } else {
+      openAuthModal();
+    }
+  });
 }
