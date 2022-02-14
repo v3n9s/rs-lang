@@ -1,8 +1,22 @@
+export interface ILoginedUser {
+  message: string | null;
+  token: string | null;
+  refreshToken: string | null;
+  userId: string | null;
+  name: string | null;
+}
+
+export interface ICustomResponse {
+  status: number;
+  message: string;
+  payload: ILoginedUser | null;
+}
+
 export const loginUser = async (user: {
   email: string;
   password: string;
-}): Promise<ILoginedUser> => {
-  const rawResponse = await fetch('https://rs-school-learnwords.herokuapp.com/signin', {
+}): Promise<ICustomResponse> => {
+  const res = await fetch('https://rs-school-learnwords.herokuapp.com/signin', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -11,19 +25,24 @@ export const loginUser = async (user: {
     body: JSON.stringify(user),
   });
 
-  if (rawResponse.status === 403) {
-    throw new Error('Неправильный email или пароль');
-  } else if (rawResponse.status === 200) {
-    const content: ILoginedUser = await rawResponse.json();
-    return content;
+  switch (res.status) {
+    case 403:
+      return {
+        status: res.status,
+        message: 'Неправильный email или пароль',
+        payload: null,
+      };
+    case 200:
+      return {
+        status: res.status,
+        message: 'Вы успешно вошли в аккаунт!',
+        payload: (await res.json()) as ILoginedUser,
+      };
+    default:
+      return {
+        status: 0,
+        message: 'Неизвестная ошибка',
+        payload: null,
+      };
   }
-  throw new Error('Unknown Error!');
 };
-
-export interface ILoginedUser {
-  message: string | null;
-  token: string | null;
-  refreshToken: string | null;
-  userId: string | null;
-  name: string | null;
-}

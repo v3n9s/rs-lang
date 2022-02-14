@@ -1,6 +1,6 @@
 import { HashPath } from '../types';
 import rsLangLogo from '../../assets/svg/rs-lang-logo.svg';
-import { createAuthButton } from './authorization';
+import { authButtonHandler } from './authorization';
 
 export const header = {
   render: (): HTMLElement => {
@@ -49,7 +49,7 @@ export const header = {
           </button>
         </div>
       </div>`;
-    createAuthButton(headerContainer);
+    authButtonHandler(headerContainer);
     return headerContainer;
   },
 };

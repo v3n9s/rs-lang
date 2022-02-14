@@ -3,10 +3,10 @@
 @import "./styles/mixin";
 @import "./styles/global";
 
+@import "./styles/components/loader";
 @import "./styles/components/header";
 @import "./styles/components/footer";
+@import "./styles/components/authorization";
 
 @import "./styles/pages/not-found";
 @import "./styles/pages/home";
-
-@import "./styles/pages/authorization";
