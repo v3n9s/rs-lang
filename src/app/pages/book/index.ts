@@ -77,12 +77,13 @@ const pageContent = (params: IBookNav): HTMLElement => {
 
   if (group === -1) {
     // запускаем book
+    createBookMain(node);
     console.log('Book loaded');
   } else {
     // запускаем book на group - page
     console.log('Book loaded on G:', group, ', P: ', page);
   }
-  createBookMain(node);
+  
   return node;
 };
 
