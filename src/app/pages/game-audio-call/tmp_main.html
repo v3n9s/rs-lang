@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css" />
+    <title>RS-Lang</title>
+  </head>
+  <body>
+    <div id="app">
+      <section class="game">
+        <div class="game__inner-container">
+          <div class="game__controls">
+            <button class="default-btn" id="audiocall-back-btn" type="button">Учебник</button>
+            <h2 class="game__caption">Аудио вызов</h2>
+            <div class="audio-call-info">
+              <i class="fas fa-info-circle"></i>
+              <div class="game__info-container">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit consequuntur
+                perferendis quae quibusdam temporibus placeat molestias voluptatum, eum officia
+                commodi. Officia omnis voluptates explicabo voluptas provident ad sed deleniti
+                dolor!
+              </div>
+            </div>
+          </div>
+          <div class="game-play__container">
+            <div class="game__complexity">
+              <button class="default-btn game__group-btn" type="button">Раздел 1</button>
+              <button class="default-btn game__group-btn" type="button">Раздел 2</button>
+              <button class="default-btn game__group-btn" type="button">Раздел 3</button>
+              <button class="default-btn game__group-btn" type="button">Раздел 4</button>
+              <button class="default-btn game__group-btn" type="button">Раздел 5</button>
+              <button class="default-btn game__group-btn" type="button">Раздел 6</button>
+            </div>
+            <div class="game-play__inner-container">
+              <div class="game-play__question">
+                <div
+                  class="game-play__img"
+                  style="
+                    width: 120px;
+                    height: 120px;
+                    background-color: skyblue;
+                    border-radius: 10px;
+                  "
+                ></div>
+                <div class="game-play__play-btn">
+                  <i class="fa-regular fa-circle-play"></i>
+                </div>
+                <div class="game-play__answer-word">word</div>
+                <button class="default-btn" type="button">нет ответа</button>
+              </div>
+              <div class="game-play__answer">
+                <div class="game-play__answer-item">
+                  <div class="answer-icon-container">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </div>
+                  <button class="answer-btn" type="button">август</button>
+                </div>
+                <div class="game-play__answer-item">
+                  <div class="answer-icon-container">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </div>
+                  <button class="answer-btn" type="button">сентябрь</button>
+                </div>
+                <div class="game-play__answer-item">
+                  <div class="answer-icon-container">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </div>
+                  <button class="answer-btn" type="button">май</button>
+                </div>
+                <div class="game-play__answer-item">
+                  <div class="answer-icon-container">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </div>
+                  <button class="answer-btn" type="button">донорно акцепторный</button>
+                </div>
+                <div class="game-play__answer-item">
+                  <div class="answer-icon-container">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </div>
+                  <button class="answer-btn" type="button">пульверизатор</button>
+                </div>
+              </div>
+            </div>
+            <div class="game-play__inner-container">
+              <div class="result__caption-container">
+                <div class="result__caption">
+                  <div class="result__play-btn" style="color: red">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                  </div>
+                  <span>не угаданно: <strong>3</strong></span>
+                </div>
+              </div>
+              <div class="result__caption-container">
+                <div class="result__caption">
+                  <div class="result__play-btn" style="color: green">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </div>
+                  <span>угаданно: <strong>6</strong></span>
+                </div>
+              </div>
+              <ul class="game-play__wrong-items">
+                <li class="result__item">
+                  <div class="game-play__play-btn result__play-btn">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </div>
+                  <span><strong>word</strong> - слово</span>
+                </li>
+                <li class="result__item">
+                  <div class="game-play__play-btn result__play-btn">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </div>
+                  <span><strong>wordasdasda</strong> - словоылодваы</span>
+                </li>
+                <li class="result__item">
+                  <div class="game-play__play-btn result__play-btn">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </div>
+                  <span><strong>word</strong> - слово</span>
+                </li>
+              </ul>
+              <ul class="game-play__right-items">
+                <li class="result__item">
+                  <div class="game-play__play-btn result__play-btn">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </div>
+                  <span><strong>word</strong> - слово</span>
+                </li>
+              </ul>
+            </div>
+            <button class="default-btn next-game-btn" type="button">закончить досрочно</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
