@@ -22,7 +22,7 @@ function createBookMain(rootElement: HTMLDivElement) {
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=4&${BookParam.Page}=1">Раздел 4</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=5&${BookParam.Page}=1">Раздел 5</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=1">Раздел 6</a></li>
-      <li><a href="$${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1">Сложные слова</a></li>
+      <li><a href="$${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1" style="pointer-events: none;">Сложные слова</a></li>
     </ol>
     `;
   const descriptionBook = document.createElement('div');
@@ -125,21 +125,7 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
   const mainContent = document.createElement('div');
   mainContent.className = 'main-content';
 
-  const navigationBlock = document.createElement('div');
-  navigationBlock.className = 'navigation-block';
-
   const words = await getWords(group - 1, page - 1);
-
-  navigationBlock.innerHTML = `
-  <i class="far fa-arrow-alt-circle-up" id="back-sections"></i>
-  <p class="page-info">Раздел ${group} / Страница ${page}</p>
-  <div>
-  <i class="far fa-arrow-alt-circle-left" id="previous-page"></i>
-  <i class="far fa-arrow-alt-circle-right" id="next-page"></i>
-  </div>
-  <i class="fas fa-gamepad icon"></i>
-  <div class="empty"></div>
-  `;
 
   const wordsContainer = document.createElement('div');
   wordsContainer.className = 'words-container';
@@ -149,9 +135,54 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
     wordsContainer.appendChild(word);
   }
 
-  mainContent.appendChild(navigationBlock);
   mainContent.appendChild(wordsContainer);
   rootElement.appendChild(mainContent);
+}
+
+function createNavigation(group: number, page: number, rootElement: HTMLDivElement) {
+  const navigationBlock = document.createElement('div');
+  navigationBlock.className = 'navigation-block';
+
+  navigationBlock.innerHTML = `
+  <i class="far fa-arrow-alt-circle-up" id="back-sections"></i>
+  <p class="page-info">Раздел ${group} / Страница ${page}</p>
+  <div>
+  <i class="far fa-arrow-alt-circle-left" id="previous-page"></i>
+  <i class="far fa-arrow-alt-circle-right" id="next-page"></i>
+  </div>
+  <div class="games-menu">
+  <i class="fas fa-gamepad icon dropdown-btn"></i>
+  <div class="dropdown-content">
+  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Аудио-вызов</a>
+  <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Спринт</a>
+  </div>
+  </div>
+  
+  <div class="empty"></div>
+  `;
+
+  const backMainBook = navigationBlock.querySelector('#back-sections');
+  backMainBook!.addEventListener('click', () => (location.href = `${HashPath.bookPage}`));
+
+  const nextBtn = navigationBlock.querySelector('#next-page');
+  nextBtn!.addEventListener('click', () => {
+    location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
+      page + 1
+    }`;
+  });
+
+  const prevBtn = navigationBlock.querySelector('#previous-page');
+  prevBtn!.addEventListener('click', () => {
+    if (page <= 1) {
+      location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=1`;
+    } else {
+      location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
+        page - 1
+      }`;
+    }
+  });
+
+  rootElement.appendChild(navigationBlock);
 }
 
 const pageContent = (params: IBookNav): HTMLElement => {
@@ -166,6 +197,7 @@ const pageContent = (params: IBookNav): HTMLElement => {
     createBookMain(node);
     console.log('Book loaded');
   } else {
+    createNavigation(group, page, node);
     createBookGroup(group, page, node);
     console.log('Book loaded on G:', group, ', P: ', page);
   }

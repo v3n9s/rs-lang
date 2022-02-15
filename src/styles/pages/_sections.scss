@@ -1,6 +1,6 @@
 .words-container {
-    width: 80%;
-    margin: 0 auto;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .navigation-block {
@@ -22,6 +22,35 @@
   }
 }
 
+.games-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: $gray_light;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.games-menu:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: $yellow_light;
+}
+
 .word-card {
   display: flex;
   justify-content: space-between;
@@ -35,35 +64,35 @@
   .image-container {
     width: 40%;
     .word-img {
-        width: 100%;
+      width: 100%;
     }
   }
 
   .some-word {
-      width: 55%;
-      padding: 5px;
-      font-size: $font_s;
-      font-family: $font-c;
-      line-height: 28px;
-      .meaning {
-          padding-left: 30px;
-          li {
-            list-style-type: circle;
-          }
+    width: 55%;
+    padding: 5px;
+    font-size: $font_s;
+    font-family: $font-c;
+    line-height: 28px;
+    .meaning {
+      padding-left: 30px;
+      li {
+        list-style-type: circle;
       }
+    }
   }
 }
 
 .user-choose {
-    text-align: center;
+  text-align: center;
 }
 
 .icon-choose {
-    color: $gray_dark;
-    padding-bottom: 10px;
-    padding-right: 10px;
+  color: $gray_dark;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 
 .specification {
-    color: $navy_light;
+  color: $navy_light;
 }
