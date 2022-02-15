@@ -74,36 +74,40 @@ function createWordElement(word: IWord): HTMLDivElement {
   const wordCard = document.createElement('div');
   wordCard.className = 'word-card';
   const imageContainer = document.createElement('div');
+  imageContainer.className = 'image-container';
   const userChoose = document.createElement('div');
+  userChoose.className = 'user-choose';
   userChoose.innerHTML = `
-  <i class="far fa-star"></i>
-  <i class="far fa-check-circle"></i>
+  <i class="far fa-star icon-choose"></i>
+  <i class="far fa-check-circle icon-choose"></i>
   `;
   const wordImg = document.createElement('img');
+  wordImg.className = 'word-img';
   wordImg.src = `https://rs-school-learnwords.herokuapp.com/${word.image}`;
 
   imageContainer.appendChild(userChoose);
   imageContainer.appendChild(wordImg);
 
   function wordSound() {
-    const audio = new Audio(); 
-    audio.src = `https://rs-school-learnwords.herokuapp.com/${word.audio}`; 
+    const audio = new Audio();
+    audio.src = `https://rs-school-learnwords.herokuapp.com/${word.audio}`;
     audio.autoplay = true;
   }
 
   const someWord = document.createElement('div');
+  someWord.className = 'some-word';
   someWord.innerHTML = `
-  <p>${word.word} - ${word.wordTranslate}</p>
+  <p><b>${word.word}</b> - ${word.wordTranslate}</p>
   <hr>
-  <i class="far fa-play-circle word-sound"></i>
-  <p>/ ${word.transcription} /</p>
-  <p>Использование:</p>
-  <ul>
+  <br>  
+  <p><i class="far fa-play-circle word-sound"></i> / ${word.transcription} /</p>
+  <p class="specification">Использование:</p>
+  <ul class="meaning">
   <li>${word.textMeaning}</li>
   <li>${word.textMeaningTranslate}</li>
   </ul>
-  <p>Пример:</p>
-  <ul>
+  <p class="specification">Пример:</p>
+  <ul class="meaning">
   <li>${word.textExample}</li>
   <li>${word.textExampleTranslate}</li>
   </ul>
@@ -127,13 +131,18 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
   const words = await getWords(group - 1, page - 1);
 
   navigationBlock.innerHTML = `
-  <i class="far fa-arrow-alt-circle-up"></i>
-  <p>Раздел ${group} / Страница ${page}</p>
-  <i class="far fa-arrow-alt-circle-left"></i>
-  <i class="far fa-arrow-alt-circle-right"></i>
+  <i class="far fa-arrow-alt-circle-up" id="back-sections"></i>
+  <p class="page-info">Раздел ${group} / Страница ${page}</p>
+  <div>
+  <i class="far fa-arrow-alt-circle-left" id="previous-page"></i>
+  <i class="far fa-arrow-alt-circle-right" id="next-page"></i>
+  </div>
+  <i class="fas fa-gamepad icon"></i>
+  <div class="empty"></div>
   `;
 
   const wordsContainer = document.createElement('div');
+  wordsContainer.className = 'words-container';
 
   for (let i = 0; i <= 19; i += 1) {
     let word = createWordElement(words[i]);
@@ -160,7 +169,7 @@ const pageContent = (params: IBookNav): HTMLElement => {
     createBookGroup(group, page, node);
     console.log('Book loaded on G:', group, ', P: ', page);
   }
-  
+
   return node;
 };
 

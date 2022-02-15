@@ -1,0 +1,69 @@
+.words-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.navigation-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: $white;
+  @include shadow;
+  font-size: $font_m;
+  .empty {
+    width: 40%;
+  }
+  .far,
+  .fas {
+    color: $navy;
+    font-size: $font_l;
+  }
+}
+
+.word-card {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  border-radius: 5px;
+  background-color: $white;
+  @include shadow;
+  margin: 10px;
+  padding: 15px;
+
+  .image-container {
+    width: 40%;
+    .word-img {
+        width: 100%;
+    }
+  }
+
+  .some-word {
+      width: 55%;
+      padding: 5px;
+      font-size: $font_s;
+      font-family: $font-c;
+      line-height: 28px;
+      .meaning {
+          padding-left: 30px;
+          li {
+            list-style-type: circle;
+          }
+      }
+  }
+}
+
+.user-choose {
+    text-align: center;
+}
+
+.icon-choose {
+    color: $gray_dark;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+.specification {
+    color: $navy_light;
+}
