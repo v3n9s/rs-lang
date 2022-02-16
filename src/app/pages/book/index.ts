@@ -1,8 +1,8 @@
 import { updatePage } from '../../components/page';
 import { TPageComponent } from '../../router';
-import { BookParam, HashPath, IBookNav } from '../../types';
-import { IWord } from '../../api/IWord';
+import { BookParam, HashPath, IBookNav, IWord } from '../../types';
 import { getWords } from '../../api/get-words';
+import { WORD_PER_PAGE } from '../../const';
 
 function createBookMain(rootElement: HTMLDivElement) {
   const bookHeader = document.createElement('h1');
@@ -22,14 +22,14 @@ function createBookMain(rootElement: HTMLDivElement) {
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=4&${BookParam.Page}=1">Раздел 4</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=5&${BookParam.Page}=1">Раздел 5</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=1">Раздел 6</a></li>
-      <li><a href="$${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1" style="pointer-events: none;">Сложные слова</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1" style="pointer-events: none;">Сложные слова</a></li>
     </ol>
     `;
   const descriptionBook = document.createElement('div');
   descriptionBook.className = 'description-book';
   descriptionBook.innerHTML = `  
     <div class="rules">
-    <i class="fas fa-info-circle icon"></i>
+    <p class="icon"><i class="fas fa-info-circle"></i></p>
     <p class="meaning"> Учебник содержит 3600 часто употребляемых английских слов.    
     Слова в коллекции отсортированы от более простых и известных к более сложным. 
     Вся коллекция разбита на шесть разделов, в каждом разделе 30 страниц, на каждой странице 20 слов для изучения.    
@@ -39,24 +39,24 @@ function createBookMain(rootElement: HTMLDivElement) {
     <hr>
     <br> 
     <div class="rules"> 
-    <i class="far fa-star icon"></i>  
+    <p class="difficult"><i class="far fa-star"></i></p>  
     <p class="meaning">Сложные слова можно отменить звёздочкой. Эти слова будут находиться в разделе <em>Сложные</em>.</p>
     </div>
     <br> 
     <div class="rules">
-    <i class="far fa-check-circle icon"></i>   
+    <p class="learned"><i class="far fa-check-circle"></i></p>   
     <p class="meaning">Изученные слова можно отметить птичкой.Изученные разделы будут отмечены птичкой.</p>
     </div>
     <br> 
     <div class="rules"> 
-    <i class="fas fa-info-circle extention icon"></i>  
+    <p class="extention"><i class="fas fa-info-circle"></i></p>  
     <p class="meaning extention">Данные функции доступны только для авторизированных пользователей.</p>
     </div>
     <br>
     <hr>
     <br> 
     <div class="rules">  
-    <i class="fas fa-gamepad icon"></i> 
+    <p class="icon"><i class="fas fa-gamepad"></i></p> 
     <p class="meaning">Мини-игры запускаются из меню, в ней можно выбрать один из шести уровней сложности, которые отличаются тем, слова какого из шести раздлов коллекции исходных данных в ней задействованы
     если мини-игра запускается со страницы учебника, в ней используются слова из той страницы учебника, на которой размещена ссылка на игру. 
     Если размещённых на странице слов для игры недостаточно, задействуются слова с предыдущих страниц. Если предыдущих страниц нет или недостаточно, игра завершается досрочно, когда закончатся все доступные слова
@@ -78,8 +78,8 @@ function createWordElement(word: IWord): HTMLDivElement {
   const userChoose = document.createElement('div');
   userChoose.className = 'user-choose';
   userChoose.innerHTML = `
-  <i class="far fa-star icon-choose"></i>
-  <i class="far fa-check-circle icon-choose"></i>
+  <p class="user-difficult"><i class="far fa-star icon-choose"></i></p>
+  <p class="user-learned"><i class="far fa-check-circle icon-choose"></i></p>
   `;
   const wordImg = document.createElement('img');
   wordImg.className = 'word-img';
@@ -130,7 +130,7 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
   const wordsContainer = document.createElement('div');
   wordsContainer.className = 'words-container';
 
-  for (let i = 0; i <= 19; i += 1) {
+  for (let i = 0; i <= WORD_PER_PAGE; i += 1) {
     let word = createWordElement(words[i]);
     wordsContainer.appendChild(word);
   }
@@ -144,14 +144,14 @@ function createNavigation(group: number, page: number, rootElement: HTMLDivEleme
   navigationBlock.className = 'navigation-block';
 
   navigationBlock.innerHTML = `
-  <i class="far fa-arrow-alt-circle-up" id="back-sections"></i>
+  <p class="pagination-icon"><i class="far fa-arrow-alt-circle-up" id="back-sections"></i></p>
   <p class="page-info">Раздел ${group} / Страница ${page}</p>
   <div>
-  <i class="far fa-arrow-alt-circle-left" id="previous-page"></i>
-  <i class="far fa-arrow-alt-circle-right" id="next-page"></i>
+  <p class="pagination-icon"><i class="far fa-arrow-alt-circle-left" id="previous-page"></i></p>
+  <p class="pagination-icon"><i class="far fa-arrow-alt-circle-right" id="next-page"></i></p>
   </div>
   <div class="games-menu">
-  <i class="fas fa-gamepad icon dropdown-btn"></i>
+  <p class="pagination-icon"><i class="fas fa-gamepad icon dropdown-btn"></i></p>
   <div class="dropdown-content">
   <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Аудио-вызов</a>
   <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Спринт</a>
@@ -164,15 +164,15 @@ function createNavigation(group: number, page: number, rootElement: HTMLDivEleme
   const backMainBook = navigationBlock.querySelector('#back-sections');
   backMainBook!.addEventListener('click', () => (location.href = `${HashPath.bookPage}`));
 
-  const nextBtn = navigationBlock.querySelector('#next-page');
-  nextBtn!.addEventListener('click', () => {
+  const nextBtn = navigationBlock.querySelector('#next-page') as HTMLButtonElement;
+  nextBtn.addEventListener('click', () => {
     location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
       page + 1
     }`;
   });
 
-  const prevBtn = navigationBlock.querySelector('#previous-page');
-  prevBtn!.addEventListener('click', () => {
+  const prevBtn = navigationBlock.querySelector('#previous-page') as HTMLButtonElement;
+  prevBtn.addEventListener('click', () => {
     if (page <= 1) {
       location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=1`;
     } else {

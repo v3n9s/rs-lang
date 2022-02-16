@@ -15,8 +15,8 @@
   .empty {
     width: 40%;
   }
-  .far,
-  .fas {
+  .pagination-icon {
+    display: inline;
     color: $navy;
     font-size: $font_l;
   }
@@ -65,6 +65,7 @@
     width: 40%;
     .word-img {
       width: 100%;
+      padding-top: 10px;
     }
   }
 
@@ -87,9 +88,10 @@
   text-align: center;
 }
 
-.icon-choose {
+.user-difficult,
+.user-learned {
+  display: inline;
   color: $gray_dark;
-  padding-bottom: 10px;
   padding-right: 10px;
 }
 

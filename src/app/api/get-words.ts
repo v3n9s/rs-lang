@@ -1,4 +1,4 @@
-import { IWord } from './IWord';
+import { IWord } from '../types';
 
 export const getWords = async (group: number, page: number): Promise<IWord[]> => {
   const rawResponse = await fetch(
