@@ -1,6 +1,7 @@
 import { TPageComponent } from '../../router';
-import { createGameNode } from './audiocall';
+import { createGameNode } from './game-container';
 import { QUESTIONS_MAX_NUMBER } from './const';
+import { IWordData } from './types';
 
 export const getAudioCallPage: TPageComponent = (params) => {
   document.title = 'RSLang - Аудио вызов';
@@ -15,15 +16,28 @@ export const getAudioCallPage: TPageComponent = (params) => {
   appContainer.append(gameNode);
 };
 
-export const acGame = {
+interface IAudiocalGameSetting {
+  round: number;
+  rightAnswer: Array<IWordData>;
+  wrongAnswer: Array<IWordData>;
+  resetRounds: () => void;
+  nextRound: () => void;
+  isOver: () => boolean;
+}
+
+export const currGame: IAudiocalGameSetting = {
   round: 0,
-  resetRounds(): void {
+  rightAnswer: [],
+  wrongAnswer: [],
+  resetRounds() {
     this.round = 0;
+    this.rightAnswer.length = 0;
+    this.wrongAnswer.length = 0;
   },
-  nextRound(): void {
+  nextRound() {
     this.round += 1;
   },
-  isOver(): boolean {
-    return this.round === QUESTIONS_MAX_NUMBER;
+  isOver() {
+    return this.round === QUESTIONS_MAX_NUMBER; // should be changeable number
   },
 };

@@ -17,3 +17,12 @@
   background-color: $green;
   color: $black;
 }
+
+.default-btn:disabled {
+  border: 1px solid $gray_light;
+  color: $gray_light;
+}
+
+.default-btn:disabled:hover {
+  background-color: $white;
+}

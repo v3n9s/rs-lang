@@ -30,3 +30,7 @@ export function getArrayOfRandomNumber(length: number, maxValue: number): Array<
   }
   return Array.from(setOfRandoms);
 }
+
+export function getIdNum(value: string): number {
+  return +value.split('-').slice(-1)[0];
+}
