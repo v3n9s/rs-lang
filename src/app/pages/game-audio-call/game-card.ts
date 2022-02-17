@@ -6,37 +6,19 @@ import { getIdNum, shuffle } from './utils';
 import { createGameResultView } from './game-result';
 
 function createOptionBtns(container: HTMLDivElement): void {
-  container.innerHTML = `
-    <div class="game-play__answer-item">
-      <div class="answer-icon-container icon_fail hidden-item" id="option-icon-0">
-        <i class="fa-regular fa-circle-xmark"></i>
-      </div>
-      <button class="answer-btn" type="button" id="option-btn-0">...</button>
-    </div>
-    <div class="game-play__answer-item">
-      <div class="answer-icon-container icon_fail hidden-item" id="option-icon-1">
-        <i class="fa-regular fa-circle-xmark"></i>
-      </div>
-      <button class="answer-btn" type="button" id="option-btn-1">...</button>
-    </div>
-    <div class="game-play__answer-item">
-      <div class="answer-icon-container icon_fail hidden-item" id="option-icon-2">
-        <i class="fa-regular fa-circle-xmark"></i>
-      </div>
-      <button class="answer-btn" type="button" id="option-btn-2">...</button>
-    </div>
-    <div class="game-play__answer-item">
-      <div class="answer-icon-container icon_fail hidden-item" id="option-icon-3">
-        <i class="fa-regular fa-circle-xmark"></i>
-      </div>
-      <button class="answer-btn" type="button" id="option-btn-3">...</button>
-    </div>
-    <div class="game-play__answer-item">
-      <div class="answer-icon-container icon_fail hidden-item" id="option-icon-4">
-        <i class="fa-regular fa-circle-xmark"></i>
-      </div>
-      <button class="answer-btn" type="button" id="option-btn-4">...</button>
-    </div>`;
+  const btnIndices = [0, 1, 2, 3, 4];
+  let btnsList = '';
+  btnIndices.forEach((index) => {
+    btnsList += `
+      <div class="game-play__answer-item">
+        <div class="answer-icon-container icon_fail hidden-item" id="option-icon-${index}">
+          <i class="fa-regular fa-circle-xmark"></i>
+        </div>
+        <button class="answer-btn" type="button" id="option-btn-${index}"></button>
+      </div>`;
+  });
+
+  container.innerHTML = btnsList;
 }
 
 export function setupGameRound(): void {
