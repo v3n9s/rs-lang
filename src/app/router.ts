@@ -6,6 +6,7 @@ import { getBookPage } from './pages/book';
 import { getHomePage } from './pages/home';
 import { getNotFoundPage } from './pages/not-found';
 import { getStatsPage } from './pages/stats';
+import { SITE_ORIGIN } from './const';
 
 export type TPageComponent = (params: IBookNav) => void;
 
@@ -72,7 +73,7 @@ export function findComponentByPath(
 }
 
 export function isValidParams(params: string): boolean {
-  const url = new URL('http://localhost:5000/');
+  const url = new URL(SITE_ORIGIN);
   url.search = params;
 
   if (params === '') {
@@ -105,7 +106,7 @@ export function parseValidParams(params: string): IBookNav {
       page: -1,
     };
   }
-  const url = new URL('http://localhost:5000/');
+  const url = new URL(SITE_ORIGIN);
   url.search = params;
   const group = Number(url.searchParams.get(BookParam.Group) as string);
   const page = Number(url.searchParams.get(BookParam.Page) as string);
