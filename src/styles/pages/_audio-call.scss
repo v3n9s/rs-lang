@@ -226,6 +226,10 @@
 
   &__play-btn {
     font-size: $font_l;
+
+    &_playing {
+      color: $navy;
+    }
   }
 }
 

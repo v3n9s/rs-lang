@@ -41,7 +41,6 @@ function createOptionBtns(container: HTMLDivElement): void {
 
 export function setupGameRound(): void {
   const gameData = store.getState().audiocallData;
-  console.log(currGame.round);
 
   const nextRoundBtn = document.querySelector('#next-round-btn') as HTMLButtonElement;
   nextRoundBtn.disabled = true;
@@ -129,12 +128,12 @@ export function createGamePlayView(): void {
     <div class="game-play__answer-options"></div>`;
 
   const playAudioBtn = node.querySelector('#play-audio-btn') as HTMLDivElement;
+  const wordSound = node.querySelector('#word-audio') as HTMLAudioElement;
+
   playAudioBtn.addEventListener('click', () => {
-    const audioItem = node.querySelector('#word-audio') as HTMLAudioElement;
-    audioItem.play();
+    wordSound.play();
   });
 
-  const wordSound = node.querySelector('#word-audio') as HTMLAudioElement;
   wordSound.addEventListener('play', () => {
     playAudioBtn.classList.add('game-play__play-btn_playing');
   });

@@ -1,7 +1,42 @@
 import { currGame } from '.';
+import { DB_ORIGIN } from '../../const';
 import { createPickComplexityView } from './game-initial-view';
+import { IWordData } from './types';
 
-// function answerRowItem():
+function createList(listClassName: string, listContent: IWordData[]): HTMLUListElement {
+  const list = document.createElement('ul');
+  list.className = listClassName;
+
+  listContent.forEach((wordItem) => {
+    const listItem = document.createElement('li');
+    listItem.className = 'result__item';
+    listItem.innerHTML = `
+      <div class="game-play__play-btn result__play-btn">
+        <i class="fa-regular fa-circle-play"></i>
+        <audio src="${DB_ORIGIN}/${wordItem.audio}"></audio>
+      </div>
+      <span><strong>${wordItem.word}</strong> - ${wordItem.wordTranslate}</span>`;
+
+    const playAudioBtn = listItem.querySelector('.result__play-btn') as HTMLDivElement;
+    const wordSound = listItem.querySelector('audio') as HTMLAudioElement;
+
+    playAudioBtn.addEventListener('click', () => {
+      wordSound.play();
+    });
+
+    wordSound.addEventListener('play', () => {
+      playAudioBtn.classList.add('game-play__play-btn_playing');
+    });
+
+    wordSound.addEventListener('ended', () => {
+      playAudioBtn.classList.remove('game-play__play-btn_playing');
+    });
+
+    list.appendChild(listItem);
+  });
+
+  return list;
+}
 
 export function createGameResultView(): void {
   const gamePlayContainer = document.querySelector('.game-play__container') as HTMLDivElement;
@@ -23,39 +58,7 @@ export function createGameResultView(): void {
         </div>
         <span>угаданно: <strong>${currGame.rightAnswer.length}</strong></span>
       </div>
-    </div>
-    <ul class="game-play__wrong-items">
-
-      <li class="result__item">
-        <div class="game-play__play-btn result__play-btn">
-          <i class="fa-regular fa-circle-play"></i>
-        </div>
-        <span><strong>word</strong> - слово</span>
-      </li>
-      <li class="result__item">
-        <div class="game-play__play-btn result__play-btn">
-          <i class="fa-regular fa-circle-play"></i>
-        </div>
-        <span><strong>wordasdasda</strong> - словоылодваы</span>
-      </li>
-      <li class="result__item">
-        <div class="game-play__play-btn result__play-btn">
-          <i class="fa-regular fa-circle-play"></i>
-        </div>
-        <span><strong>word</strong> - слово</span>
-      </li>
-
-    </ul>
-    <ul class="game-play__right-items">
-
-      <li class="result__item">
-        <div class="game-play__play-btn result__play-btn">
-          <i class="fa-regular fa-circle-play"></i>
-        </div>
-        <span><strong>word</strong> - слово</span>
-      </li>
-
-    </ul>`;
+    </div>`;
 
   const nextGameBtn = document.createElement('button');
   nextGameBtn.type = 'button';
@@ -66,6 +69,11 @@ export function createGameResultView(): void {
     gamePlayContainer.innerHTML = '';
     createPickComplexityView(gameViewContainer);
   });
+
+  node.append(
+    createList('game-play__wrong-items', currGame.wrongAnswer),
+    createList('game-play__right-items', currGame.rightAnswer),
+  );
 
   gamePlayContainer.append(node, nextGameBtn);
 }
