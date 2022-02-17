@@ -30,6 +30,7 @@
   }
 
   &__info-container {
+    z-index: 100;
     position: absolute;
     top: 42px;
     right: 0;
@@ -46,9 +47,11 @@
 
   &-play {
     &__container {
+      position: relative;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      min-height: 400px;
     }
 
     &__inner-container {
@@ -66,8 +69,17 @@
       min-height: 400px;
     }
 
-    &__img {
+    &__img-container {
       margin-bottom: 20px;
+      width: 120px;
+      height: 120px;
+      background-color: $navy_light;
+      border-radius: 10px;
+      @include shadow;
+    }
+
+    &__img {
+      border-radius: 10px;
     }
 
     &__play-btn {
@@ -203,4 +215,17 @@
   &__play-btn {
     font-size: $font_l;
   }
+}
+
+#ac-loader-overlay {
+  z-index: 5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
