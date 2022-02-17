@@ -9,15 +9,15 @@ export const createUserWord = async (obj: {
   const rawResponse = await fetch(
     `https://rs-school-learnwords.herokuapp.com/users/${obj.userId}/words/${obj.wordId}`,
     {
-      method: 'POST',
+      method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'difficulty': 'difficult',
-        'optional': {},
+        difficulty: 'difficult',
+        optional: {},
       }),
     },
   );
@@ -29,8 +29,6 @@ export const createUserWord = async (obj: {
     case 200:
       return;
     default:
-      console.log(rawResponse.status);
-      rawResponse.headers.forEach(el => console.log(el));
       throw new Error('Unknown Error!');
   }
 };

@@ -2,7 +2,7 @@
 import { ILoginedUser } from './sign-in';
 // const userId = store.getState().user.userId;
 
-export const updateUserToken = async (userId: string): Promise<ILoginedUser> => {
+export const updateUserToken = async (userId: string | null): Promise<ILoginedUser> => {
   const rawResponse = await fetch(
     `https://rs-school-learnwords.herokuapp.com/users/${userId}/tokens`,
     {

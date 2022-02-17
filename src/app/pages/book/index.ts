@@ -2,7 +2,10 @@ import { updatePage } from '../../components/page';
 import { TPageComponent } from '../../router';
 import { BookParam, HashPath, IBookNav, IWord } from '../../types';
 import { getWords } from '../../api/get-words';
-import { WORD_PER_PAGE } from '../../const';
+import { store } from '../../redux/store';
+// import { updateUserToken } from '../../api/update-user-token';
+import { createUserWord } from '../../api/create-user-word';
+import { getUserWord, UserWord } from '../../api/get-user-word';
 
 function createBookMain(rootElement: HTMLDivElement) {
   const bookHeader = document.createElement('h1');
@@ -22,7 +25,7 @@ function createBookMain(rootElement: HTMLDivElement) {
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=4&${BookParam.Page}=1">Раздел 4</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=5&${BookParam.Page}=1">Раздел 5</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=1">Раздел 6</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1" style="pointer-events: none;">Сложные слова</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1">Сложные слова</a></li>
     </ol>
     `;
   const descriptionBook = document.createElement('div');
@@ -70,16 +73,28 @@ function createBookMain(rootElement: HTMLDivElement) {
   return rootElement;
 }
 
-function createWordElement(word: IWord): HTMLDivElement {
+function createDifficultWords(word: IWord) {
+  if (store.getState().user.userId === null) {
+    return Promise.reject('err');
+  } else {
+    const userId = store.getState().user.userId!;
+    return createUserWord({ userId: userId, wordId: word.id, word: word.word });
+  }
+}
+
+function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
   const wordCard = document.createElement('div');
   wordCard.className = 'word-card';
+  const indicatorContainer = document.createElement('div');
+  indicatorContainer.className = 'indicator';
+
   const imageContainer = document.createElement('div');
   imageContainer.className = 'image-container';
   const userChoose = document.createElement('div');
   userChoose.className = 'user-choose';
   userChoose.innerHTML = `
   <p class="user-difficult"><i class="far fa-star icon-choose"></i></p>
-  <p class="user-learned"><i class="far fa-check-circle icon-choose"></i></p>
+  <p class="user-learned" ><i class="far fa-check-circle icon-choose"></i></p>
   `;
   const wordImg = document.createElement('img');
   wordImg.className = 'word-img';
@@ -115,6 +130,18 @@ function createWordElement(word: IWord): HTMLDivElement {
   const sound = someWord.querySelector('.word-sound');
   sound!.addEventListener('click', wordSound);
 
+  const difficultBtn = userChoose.querySelector('.user-difficult') as HTMLElement;
+  const learnedBtn = userChoose.querySelector('.user-learned') as HTMLElement;
+  if (userWord === UserWord.Difficult) {
+    difficultBtn.style.color = '#f95959';
+    indicatorContainer.style.backgroundColor = '#f95959';
+  } else if (userWord === UserWord.Learned) {
+    learnedBtn.style.color = '#17b86b';
+    indicatorContainer.style.backgroundColor = '#17b86b';
+  }
+  difficultBtn.addEventListener('click', () => createDifficultWords(word));
+
+  wordCard.appendChild(indicatorContainer);
   wordCard.appendChild(imageContainer);
   wordCard.appendChild(someWord);
 
@@ -125,14 +152,28 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
   const mainContent = document.createElement('div');
   mainContent.className = 'main-content';
 
-  const words = await getWords(group - 1, page - 1);
-
   const wordsContainer = document.createElement('div');
   wordsContainer.className = 'words-container';
 
-  for (let i = 0; i <= WORD_PER_PAGE; i += 1) {
-    let word = createWordElement(words[i]);
-    wordsContainer.appendChild(word);
+  const words = await getWords(group - 1, page - 1);
+  if (store.getState().user.userId !== null) {
+    const enrichedWordsPromise: Promise<[IWord, UserWord]>[] = words.map((word) =>
+      getUserWord(store.getState().user.userId!, word.id).then(
+        (userWord: UserWord) => [word, userWord],
+        () => [word, UserWord.Notset],
+      ),
+    );
+
+    const enrichedWords = await Promise.all(enrichedWordsPromise);
+    enrichedWords.forEach(([word, userWord]) => {
+      let wordElement = createWordElement(word, userWord);
+      wordsContainer.appendChild(wordElement);
+    });
+  } else {
+    words.forEach((word) => {
+      let wordElement = createWordElement(word);
+      wordsContainer.appendChild(wordElement);
+    });
   }
 
   mainContent.appendChild(wordsContainer);
@@ -210,5 +251,3 @@ export const getBookPage: TPageComponent = (params) => {
   const pageTitle = 'RSLang - Учебник' + bookLocation;
   updatePage(pageTitle, pageContent(params));
 };
-
-
