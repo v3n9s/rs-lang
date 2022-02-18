@@ -10,5 +10,5 @@ export const store = configureStore({
 });
 
 store.subscribe(() => {
-  console.log(store.getState().audiocallData);
+  console.log(store.getState());
 });
