@@ -1,13 +1,13 @@
 import { store } from '../redux/store';
 
 const token = store.getState().user.token;
-export const updateUserWord = async (obj: {
-  userId: string;
-  wordId: string;
-  word: string;
-}): Promise<void> => {
+export const updateUserWord = async (
+  userId: string,
+  wordId: string,
+  status: string,
+): Promise<void> => {
   const rawResponse = await fetch(
-    `https://rs-school-learnwords.herokuapp.com/users/${obj.userId}/words/${obj.wordId}`,
+    `https://rs-school-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
     {
       method: 'PUT',
       headers: {
@@ -16,7 +16,7 @@ export const updateUserWord = async (obj: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        difficulty: 'difficult',
+        difficulty: status,
         optional: {},
       }),
     },

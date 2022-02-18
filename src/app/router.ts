@@ -87,7 +87,7 @@ export function isValidParams(params: string): boolean {
     const pageNum = +page;
 
     if (Number.isInteger(groupNum) && Number.isInteger(pageNum)) {
-      if (groupNum >= 0 && groupNum <= 6 && pageNum >= 0 && pageNum <= 29) {
+      if (groupNum >= 0 && groupNum <= 5 && pageNum >= 0 && pageNum <= 29) {
         return true;
       }
       if (groupNum === 6 && pageNum === 0) {

@@ -2,11 +2,12 @@ import { store } from '../redux/store';
 
 const token = store.getState().user.token;
 export const createUserWord = async (
-  obj: { userId: string; wordId: string; word: string },
+  userId: string,
+  wordId: string,
   status: string,
 ): Promise<void> => {
   const rawResponse = await fetch(
-    `https://rs-school-learnwords.herokuapp.com/users/${obj.userId}/words/${obj.wordId}`,
+    `https://rs-school-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
     {
       method: 'POST',
       headers: {

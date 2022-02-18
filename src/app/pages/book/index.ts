@@ -3,11 +3,14 @@ import { TPageComponent } from '../../router';
 import { BookParam, HashPath, IBookNav, IWord } from '../../types';
 import { getWords } from '../../api/get-words';
 import { store } from '../../redux/store';
-// import { updateUserToken } from '../../api/update-user-token';
 import { createUserWord } from '../../api/create-user-word';
 import { getUserWord, UserWord } from '../../api/get-user-word';
 import { updateUserWord } from '../../api/update-user-word';
-import { deleteUserWord } from '../../api/delete-user-word';
+import {
+  registerEnableStarListener,
+  registerEnableTickListener,
+} from '../book/registerEnableListener';
+import { createPageDifficultWord, createHeaderPageDifficultWord } from '../book/create-page-difficult-word';
 
 function createBookMain(rootElement: HTMLDivElement) {
   const bookHeader = document.createElement('h1');
@@ -21,13 +24,13 @@ function createBookMain(rootElement: HTMLDivElement) {
   bookSections.className = 'sections';
   bookSections.innerHTML = `
     <ol>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=1&${BookParam.Page}=1">Раздел 1</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=2&${BookParam.Page}=1">Раздел 2</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=3&${BookParam.Page}=1">Раздел 3</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=4&${BookParam.Page}=1">Раздел 4</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=5&${BookParam.Page}=1">Раздел 5</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=1">Раздел 6</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=7&${BookParam.Page}=1">Сложные слова</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=0&${BookParam.Page}=0">Раздел 1</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=1&${BookParam.Page}=0">Раздел 2</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=2&${BookParam.Page}=0">Раздел 3</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=3&${BookParam.Page}=0">Раздел 4</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=4&${BookParam.Page}=0">Раздел 5</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=5&${BookParam.Page}=0">Раздел 6</a></li>
+      <li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=0">Сложные слова</a></li>
     </ol>
     `;
   const descriptionBook = document.createElement('div');
@@ -75,7 +78,7 @@ function createBookMain(rootElement: HTMLDivElement) {
   return rootElement;
 }
 
-async function createDifficultWord(word: IWord, status: string) {
+export async function createDifficultWord(word: IWord, status: string) {
   if (store.getState().user.userId === null) {
     return Promise.reject('err');
   } else {
@@ -83,16 +86,19 @@ async function createDifficultWord(word: IWord, status: string) {
     const wordStatus = await getUserWord(userId, word.id);
 
     if (wordStatus === UserWord.Notfound) {
-      createUserWord({ userId: userId, wordId: word.id, word: word.word }, status);
-      console.log('create');
+      console.log('create started');
+
+      createUserWord(userId, word.id, status);
+      console.log('create finisfed');
     } else {
-      updateUserWord({ userId: userId, wordId: word.id, word: word.word });
-      console.log('update');
+      console.log('update started');
+
+      updateUserWord(userId, word.id, status);
+      console.log('update finished');
     }
   }
 }
-
-function registerDisableStarListener(
+export function registerDisableStarListener(
   difficultBtn: HTMLElement,
   word: IWord,
   learnedBtn: HTMLElement,
@@ -104,59 +110,29 @@ function registerDisableStarListener(
       learnedBtn.style.color = '#455d7a';
       indicatorContainer.style.backgroundColor = '#ffff';
       registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-    });
-  };
-}
-
-function registerEnableStarListener(
-  difficultBtn: HTMLElement,
-  word: IWord,
-  learnedBtn: HTMLElement,
-  indicatorContainer: HTMLDivElement,
-) {
-  difficultBtn.onclick = () => {
-    createDifficultWord(word, UserWord.Learned).then(() => {
-      difficultBtn.style.color = '#f95959';
-      learnedBtn.style.color = '#455d7a';
-      indicatorContainer.style.backgroundColor = '#ffd0d0';
-      registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-    });
-  };
-}
-
-function registerDisableTickListener(
-  difficultBtn: HTMLElement,
-  word: IWord,
-  learnedBtn: HTMLElement,
-  indicatorContainer: HTMLDivElement,
-) {
-  difficultBtn.onclick = () => {
-    createDifficultWord(word, UserWord.Notset).then(() => {
-      difficultBtn.style.color = '#455d7a';
-      learnedBtn.style.color = '#455d7a';
-      indicatorContainer.style.backgroundColor = '#ffff';
       registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
     });
   };
 }
 
-function registerEnableTickListener(
+export function registerDisableTickListener(
   difficultBtn: HTMLElement,
   word: IWord,
   learnedBtn: HTMLElement,
   indicatorContainer: HTMLDivElement,
 ) {
-  difficultBtn.onclick = () => {
-    createDifficultWord(word, UserWord.Difficult).then(() => {
+  learnedBtn.onclick = () => {
+    createDifficultWord(word, UserWord.Notset).then(() => {
       difficultBtn.style.color = '#455d7a';
-      learnedBtn.style.color = '#17b86b';
-      indicatorContainer.style.backgroundColor = '#89f5c1';
-      registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+      learnedBtn.style.color = '#455d7a';
+      indicatorContainer.style.backgroundColor = '#ffff';
+      registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+      registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
     });
   };
 }
 
-function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
+export function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
   const wordCard = document.createElement('div');
   wordCard.className = 'word-card';
   const indicatorContainer = document.createElement('div');
@@ -201,8 +177,8 @@ function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
   <li>${word.textExampleTranslate}</li>
   </ul>
   `;
-  const sound = someWord.querySelector('.word-sound');
-  sound!.addEventListener('click', wordSound);
+  const sound = someWord.querySelector('.word-sound') as HTMLButtonElement;
+  sound.addEventListener('click', wordSound);
 
   const difficultBtn = userChoose.querySelector('.user-difficult') as HTMLElement;
   const learnedBtn = userChoose.querySelector('.user-learned') as HTMLElement;
@@ -210,21 +186,16 @@ function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
     difficultBtn.style.color = '#f95959';
     indicatorContainer.style.backgroundColor = '#ffd0d0';
     registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-
+    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
   } else if (userWord === UserWord.Learned) {
     learnedBtn.style.color = '#17b86b';
     indicatorContainer.style.backgroundColor = '#89f5c1';
+    registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
   } else {
     registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-
+    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
   }
-  learnedBtn.addEventListener('click', () => {
-    createDifficultWord(word, 'learned').then(() => {
-      learnedBtn.style.color = '#17b86b';
-      difficultBtn.style.color = '#455d7a';
-      indicatorContainer.style.backgroundColor = '#89f5c1';
-    });
-  });
 
   wordCard.appendChild(indicatorContainer);
   wordCard.appendChild(imageContainer);
@@ -240,7 +211,7 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
   const wordsContainer = document.createElement('div');
   wordsContainer.className = 'words-container';
 
-  const words = await getWords(group - 1, page - 1);
+  const words = await getWords(group, page);
   if (store.getState().user.userId !== null) {
     const enrichedWordsPromise: Promise<[IWord, UserWord]>[] = words.map((word) =>
       getUserWord(store.getState().user.userId!, word.id).then(
@@ -271,7 +242,7 @@ function createNavigation(group: number, page: number, rootElement: HTMLDivEleme
 
   navigationBlock.innerHTML = `
   <p class="pagination-icon"><i class="far fa-arrow-alt-circle-up" id="back-sections"></i></p>
-  <p class="page-info">Раздел ${group} / Страница ${page}</p>
+  <p class="page-info">Раздел ${group + 1} / Страница ${page + 1}</p>
   <div>
   <p class="pagination-icon"><i class="far fa-arrow-alt-circle-left" id="previous-page"></i></p>
   <p class="pagination-icon"><i class="far fa-arrow-alt-circle-right" id="next-page"></i></p>
@@ -287,8 +258,8 @@ function createNavigation(group: number, page: number, rootElement: HTMLDivEleme
   <div class="empty"></div>
   `;
 
-  const backMainBook = navigationBlock.querySelector('#back-sections');
-  backMainBook!.addEventListener('click', () => (location.href = `${HashPath.bookPage}`));
+  const backMainBook = navigationBlock.querySelector('#back-sections') as HTMLDivElement;
+  backMainBook.addEventListener('click', () => (location.href = `${HashPath.bookPage}`));
 
   const nextBtn = navigationBlock.querySelector('#next-page') as HTMLButtonElement;
   nextBtn.addEventListener('click', () => {
@@ -322,10 +293,13 @@ const pageContent = (params: IBookNav): HTMLElement => {
     // запускаем book
     createBookMain(node);
     console.log('Book loaded');
-  } else {
+  } else if (params.group <= 5) {
     createNavigation(group, page, node);
     createBookGroup(group, page, node);
     console.log('Book loaded on G:', group, ', P: ', page);
+  } else if (params.group === 6) {
+    createHeaderPageDifficultWord(node);
+    createPageDifficultWord(6, node);
   }
 
   return node;
