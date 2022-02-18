@@ -8,6 +8,7 @@ import { getNotFoundPage } from './pages/not-found';
 import { getStatsPage } from './pages/stats';
 import { SITE_ORIGIN } from './const';
 import { addACGameKeyboardAction } from './pages/game-audio-call/keyboad-control';
+import { store } from './redux/store';
 
 export type TPageComponent = (params: IBookNav) => void;
 
@@ -93,7 +94,10 @@ export function isValidParams(params: string): boolean {
         return true;
       }
       if (groupNum === 6 && pageNum === 0) {
-        return true;
+        const userId = store.getState().user.userId;
+        if (userId) {
+          return true;
+        }
       }
     }
   }
