@@ -6,6 +6,8 @@ import { store } from '../../redux/store';
 // import { updateUserToken } from '../../api/update-user-token';
 import { createUserWord } from '../../api/create-user-word';
 import { getUserWord, UserWord } from '../../api/get-user-word';
+import { updateUserWord } from '../../api/update-user-word';
+import { deleteUserWord } from '../../api/delete-user-word';
 
 function createBookMain(rootElement: HTMLDivElement) {
   const bookHeader = document.createElement('h1');
@@ -73,13 +75,85 @@ function createBookMain(rootElement: HTMLDivElement) {
   return rootElement;
 }
 
-function createDifficultWords(word: IWord) {
+async function createDifficultWord(word: IWord, status: string) {
   if (store.getState().user.userId === null) {
     return Promise.reject('err');
   } else {
     const userId = store.getState().user.userId!;
-    return createUserWord({ userId: userId, wordId: word.id, word: word.word });
+    const wordStatus = await getUserWord(userId, word.id);
+
+    if (wordStatus === UserWord.Notfound) {
+      createUserWord({ userId: userId, wordId: word.id, word: word.word }, status);
+      console.log('create');
+    } else {
+      updateUserWord({ userId: userId, wordId: word.id, word: word.word });
+      console.log('update');
+    }
   }
+}
+
+function registerDisableStarListener(
+  difficultBtn: HTMLElement,
+  word: IWord,
+  learnedBtn: HTMLElement,
+  indicatorContainer: HTMLDivElement,
+) {
+  difficultBtn.onclick = () => {
+    createDifficultWord(word, UserWord.Notset).then(() => {
+      difficultBtn.style.color = '#455d7a';
+      learnedBtn.style.color = '#455d7a';
+      indicatorContainer.style.backgroundColor = '#ffff';
+      registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    });
+  };
+}
+
+function registerEnableStarListener(
+  difficultBtn: HTMLElement,
+  word: IWord,
+  learnedBtn: HTMLElement,
+  indicatorContainer: HTMLDivElement,
+) {
+  difficultBtn.onclick = () => {
+    createDifficultWord(word, UserWord.Learned).then(() => {
+      difficultBtn.style.color = '#f95959';
+      learnedBtn.style.color = '#455d7a';
+      indicatorContainer.style.backgroundColor = '#ffd0d0';
+      registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    });
+  };
+}
+
+function registerDisableTickListener(
+  difficultBtn: HTMLElement,
+  word: IWord,
+  learnedBtn: HTMLElement,
+  indicatorContainer: HTMLDivElement,
+) {
+  difficultBtn.onclick = () => {
+    createDifficultWord(word, UserWord.Notset).then(() => {
+      difficultBtn.style.color = '#455d7a';
+      learnedBtn.style.color = '#455d7a';
+      indicatorContainer.style.backgroundColor = '#ffff';
+      registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    });
+  };
+}
+
+function registerEnableTickListener(
+  difficultBtn: HTMLElement,
+  word: IWord,
+  learnedBtn: HTMLElement,
+  indicatorContainer: HTMLDivElement,
+) {
+  difficultBtn.onclick = () => {
+    createDifficultWord(word, UserWord.Difficult).then(() => {
+      difficultBtn.style.color = '#455d7a';
+      learnedBtn.style.color = '#17b86b';
+      indicatorContainer.style.backgroundColor = '#89f5c1';
+      registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    });
+  };
 }
 
 function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
@@ -134,12 +208,23 @@ function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
   const learnedBtn = userChoose.querySelector('.user-learned') as HTMLElement;
   if (userWord === UserWord.Difficult) {
     difficultBtn.style.color = '#f95959';
-    indicatorContainer.style.backgroundColor = '#f95959';
+    indicatorContainer.style.backgroundColor = '#ffd0d0';
+    registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
+
   } else if (userWord === UserWord.Learned) {
     learnedBtn.style.color = '#17b86b';
-    indicatorContainer.style.backgroundColor = '#17b86b';
+    indicatorContainer.style.backgroundColor = '#89f5c1';
+  } else {
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
+
   }
-  difficultBtn.addEventListener('click', () => createDifficultWords(word));
+  learnedBtn.addEventListener('click', () => {
+    createDifficultWord(word, 'learned').then(() => {
+      learnedBtn.style.color = '#17b86b';
+      difficultBtn.style.color = '#455d7a';
+      indicatorContainer.style.backgroundColor = '#89f5c1';
+    });
+  });
 
   wordCard.appendChild(indicatorContainer);
   wordCard.appendChild(imageContainer);

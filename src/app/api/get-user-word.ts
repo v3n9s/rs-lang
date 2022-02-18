@@ -1,9 +1,10 @@
 import { store } from '../redux/store';
 
 export enum UserWord {
-  Difficult,
-  Learned,
-  Notset,
+  Difficult = 'difficult',
+  Learned = 'learned',
+  Notset = 'notset',
+  Notfound = 'notfound',
 }
 
 const token = store.getState().user.token;
@@ -23,10 +24,10 @@ export const getUserWord = async (userId: string, wordId: string): Promise<UserW
     case 401:
       throw new Error('Access token is missing or invalid');
     case 404:
-      return UserWord.Notset;
+      return UserWord.Notfound;
     case 200:
       const wordStatus = (await rawResponse.json()) as { difficulty: string };
-      if (wordStatus.difficulty === 'dificult') {
+      if (wordStatus.difficulty === 'difficult') {
         return UserWord.Difficult;
       } else if (wordStatus.difficulty === 'learned') {
         return UserWord.Learned;

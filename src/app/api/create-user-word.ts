@@ -1,23 +1,22 @@
 import { store } from '../redux/store';
 
 const token = store.getState().user.token;
-export const createUserWord = async (obj: {
-  userId: string;
-  wordId: string;
-  word: string;
-}): Promise<void> => {
+export const createUserWord = async (
+  obj: { userId: string; wordId: string; word: string },
+  status: string,
+): Promise<void> => {
   const rawResponse = await fetch(
     `https://rs-school-learnwords.herokuapp.com/users/${obj.userId}/words/${obj.wordId}`,
     {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'difficulty': 'difficult',
-        'optional': {},
+        difficulty: status,
+        optional: {},
       }),
     },
   );
@@ -30,7 +29,7 @@ export const createUserWord = async (obj: {
       return;
     default:
       console.log(rawResponse.status);
-      rawResponse.headers.forEach(el => console.log(el));
+      rawResponse.headers.forEach((el) => console.log(el));
       throw new Error('Unknown Error!');
   }
 };

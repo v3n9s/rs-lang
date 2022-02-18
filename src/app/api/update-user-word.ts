@@ -1,7 +1,7 @@
 import { store } from '../redux/store';
 
 const token = store.getState().user.token;
-export const createUserWord = async (obj: {
+export const updateUserWord = async (obj: {
   userId: string;
   wordId: string;
   word: string;
