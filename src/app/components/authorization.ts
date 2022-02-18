@@ -124,8 +124,7 @@ async function loginFormHandler(form: HTMLFormElement): Promise<void> {
           modal.remove();
 
           showMessage(res.message);
-          const authBtn = document.querySelector('#auth-btn') as HTMLButtonElement;
-          updateAuthButton(authBtn);
+          location.reload();
           break;
         case 403:
           showMessage(res.message);
@@ -193,6 +192,7 @@ export function authButtonHandler(node: HTMLElement): void {
     if (store.getState().user.token) {
       store.dispatch(removeUser());
       updateAuthButton(authBtn);
+      location.reload();
     } else {
       openAuthModal();
     }
