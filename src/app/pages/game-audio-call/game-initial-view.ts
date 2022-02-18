@@ -1,6 +1,6 @@
 import { currGame } from '.';
 import { NOT_SET } from '../../const';
-import { getGameData } from './request';
+import { getGameData } from './game-data';
 import { showLoader } from './utils';
 import { createGamePlayView, setupGameRound } from './game-card';
 

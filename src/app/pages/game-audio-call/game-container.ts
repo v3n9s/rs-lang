@@ -4,7 +4,7 @@ import { BookParam, HashPath } from '../../types';
 import { showLoader } from './utils';
 import { createPickComplexityView } from './game-initial-view';
 import { createGamePlayView, setupGameRound } from './game-card';
-import { getGameData } from './request';
+import { getGameData } from './game-data';
 import { currGame } from '.';
 
 function createGameViewContainer(book: IBookNav): HTMLElement {
