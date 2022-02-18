@@ -1,11 +1,9 @@
 import { ILoginedUser } from '../../api/sign-in';
-import { DB_ORIGIN, MAX_PAGE_INDEX, NOT_SET } from '../../const';
-import { updateAudioCallData } from '../../redux/audiocall/data';
+import { DB_ORIGIN } from '../../const';
 import { store } from '../../redux/store';
 import { updateUser } from '../../redux/user';
-import { BookParam, IBookNav } from '../../types';
+import { BookParam } from '../../types';
 import { IWordData } from './types';
-import { getArrayOfRandomNumber, shuffle } from './utils';
 
 enum Endpoint {
   Words = '/words',
@@ -14,7 +12,7 @@ enum Endpoint {
   Tokens = '/tokens',
 }
 
-async function getWordsList(group: number, page: number): Promise<IWordData[]> {
+export async function getWordsList(group: number, page: number): Promise<IWordData[]> {
   try {
     const res = await fetch(
       `${DB_ORIGIN}${Endpoint.Words}?${BookParam.Group}=${group}&${BookParam.Page}=${page}`,
@@ -30,39 +28,6 @@ async function getWordsList(group: number, page: number): Promise<IWordData[]> {
   } catch {
     return [];
   }
-}
-
-export async function getGameData(book: IBookNav): Promise<void> {
-  if (book.group === NOT_SET) {
-    throw new Error('Func getGameData should NOT receive -1 in group prop! Check arguments.');
-  }
-
-  if (book.page === NOT_SET) {
-    const randomPagesCount = 3;
-    const pages = getArrayOfRandomNumber(randomPagesCount, MAX_PAGE_INDEX);
-    const data = await Promise.all([
-      getWordsList(book.group, pages[0]),
-      getWordsList(book.group, pages[1]),
-      getWordsList(book.group, pages[2]),
-    ]);
-
-    const wordsList: IWordData[] = [...data[0], ...data[1], ...data[2]];
-    shuffle(wordsList);
-
-    store.dispatch(updateAudioCallData(wordsList));
-  } else {
-    // Page defined
-    store.dispatch(updateAudioCallData([])); // --- test emty array
-  }
-
-  // const userId = store.getState().user.userId;
-  // if (userId) {
-  //   // 2 user auth
-  //   console.log('user id', userId);
-  // } else {
-  //   // 1 user anonim
-  //   console.log('user id', userId);
-  // }
 }
 
 // export async function getNewToken(func: Function, args: IArguments): Promise<unknown> {
