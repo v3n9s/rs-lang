@@ -8,3 +8,7 @@ export const store = configureStore({
     audiocallData: audiocallReducer,
   },
 });
+
+store.subscribe(() => {
+  console.log(store.getState().audiocallData);
+});

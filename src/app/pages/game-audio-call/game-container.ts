@@ -3,7 +3,9 @@ import { IBookNav } from '../../types';
 import { BookParam, HashPath } from '../../types';
 import { showLoader } from './utils';
 import { createPickComplexityView } from './game-initial-view';
-import { createGamePlayView } from './game-card';
+import { createGamePlayView, setupGameRound } from './game-card';
+import { getGameData } from './request';
+import { currGame } from '.';
 
 function createGameViewContainer(book: IBookNav): HTMLElement {
   const node = document.createElement('div');
@@ -15,10 +17,16 @@ function createGameViewContainer(book: IBookNav): HTMLElement {
       <div class="audio-call-info">
         <i class="fas fa-info-circle"></i>
         <div class="game__info-container">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedit consequuntur
-          perferendis quae quibusdam temporibus placeat molestias voluptatum, eum officia
-          commodi. Officia omnis voluptates explicabo voluptas provident ad sed deleniti
-          dolor!
+          Для управления в игре используйте мышь или клавиатуру.
+          <br />
+          Управления с клавиатуры:
+          <br />
+          <b>z</b> - озвучить
+          <br />
+          <b>x</b> - следующее слово
+          <br />
+          <b>1</b>, <b>2</b>, <b>3</b>, <b>4</b>, <b>5</b> выбора ответа, где <b>1</b> - это
+          верхний вариант ответа, а <b>5</b> - нижний.
         </div>
       </div>
     </div>
@@ -48,11 +56,13 @@ export function createGameNode(book: IBookNav): HTMLElement {
   if (book.group === NOT_SET) {
     createPickComplexityView(gameViewContainer);
   } else {
-    setTimeout(() => {
+    setTimeout(async () => {
       showLoader(true);
-      // getGameData(); // game data will be placed in store
-      showLoader(false);
+      await getGameData(book);
+      currGame.resetRounds();
       createGamePlayView();
+      setupGameRound();
+      showLoader(false);
     }, 0);
   }
 

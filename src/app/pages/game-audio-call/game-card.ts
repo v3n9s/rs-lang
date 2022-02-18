@@ -4,6 +4,7 @@ import { store } from '../../redux/store';
 import { WORDS_IN_ROUND } from './const';
 import { getIdNum, shuffle } from './utils';
 import { createGameResultView } from './game-result';
+import { addACGameKeyboardAction } from './keyboad-control';
 
 function createOptionBtns(container: HTMLDivElement): void {
   const btnIndices = [0, 1, 2, 3, 4];
@@ -22,7 +23,10 @@ function createOptionBtns(container: HTMLDivElement): void {
 }
 
 export function setupGameRound(): void {
+  addACGameKeyboardAction(false);
+
   const gameData = store.getState().audiocallData;
+  console.log('round set for >', currGame.round); // -----------------------------------
 
   const nextRoundBtn = document.querySelector('#next-round-btn') as HTMLButtonElement;
   nextRoundBtn.disabled = true;
@@ -88,6 +92,8 @@ export function setupGameRound(): void {
       }
     });
   });
+
+  addACGameKeyboardAction(true);
 }
 
 export function createGamePlayView(): void {
@@ -104,7 +110,7 @@ export function createGamePlayView(): void {
         <i class="fa-regular fa-circle-play"></i>
         <audio id="word-audio" src="#"></audio>
       </div>
-      <div class="game-play__answer-word">...</div>
+      <div class="game-play__answer-word"></div>
       <button class="default-btn" type="button" id="next-round-btn">дальше</button>
     </div>
     <div class="game-play__answer-options"></div>`;
@@ -128,7 +134,12 @@ export function createGamePlayView(): void {
   nextRoundBtn.addEventListener('click', () => {
     nextRoundBtn.disabled = true;
     currGame.nextRound();
+
+    console.log(currGame); /// -----------------------------
+    console.log('is over >', currGame.isOver()); /// -----------------------------
+
     if (currGame.isOver()) {
+      addACGameKeyboardAction(false);
       createGameResultView();
     } else {
       setupGameRound();

@@ -7,6 +7,7 @@ import { getHomePage } from './pages/home';
 import { getNotFoundPage } from './pages/not-found';
 import { getStatsPage } from './pages/stats';
 import { SITE_ORIGIN } from './const';
+import { addACGameKeyboardAction } from './pages/game-audio-call/keyboad-control';
 
 export type TPageComponent = (params: IBookNav) => void;
 
@@ -123,6 +124,8 @@ export function router(): void {
   const hashPathComponent = findComponentByPath(hashPath, routes);
 
   if (hashPathComponent) {
+    addACGameKeyboardAction(false);
+
     if (hashPathComponent.hasParams && isValidParams(searchParams)) {
       hashPathComponent.componentFunc(parseValidParams(searchParams));
     } else {

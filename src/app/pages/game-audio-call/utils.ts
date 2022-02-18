@@ -1,6 +1,6 @@
-export function showLoader(isShown: boolean): void {
+export function showLoader(toShow: boolean): void {
   const loaderContainer = document.querySelector('.game-play__container') as HTMLDivElement;
-  if (isShown) {
+  if (toShow) {
     const overlay = document.createElement('div');
     overlay.id = 'ac-loader-overlay';
     const loader = document.createElement('div');
