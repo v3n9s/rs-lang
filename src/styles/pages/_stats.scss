@@ -1,0 +1,15 @@
+.stats {
+  &__content-container {
+    border-radius: 10px;
+    background-color: $white;
+    @include shadow;
+    padding: 20px;
+  }
+
+  &__not-auth {
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

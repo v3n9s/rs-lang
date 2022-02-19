@@ -1,0 +1,8 @@
+.about {
+  &__content-container {
+    border-radius: 10px;
+    background-color: $white;
+    @include shadow;
+    padding: 20px;
+  }
+}
