@@ -4,7 +4,7 @@ export const SITE_ORIGIN = 'http://localhost:5000';
 export const DB_ORIGIN = 'https://rs-school-learnwords.herokuapp.com';
 
 export const MAX_GROUP_INDEX = 5;
-export const MAX_DIFFICULT_GROUP_INDEX = 6;
+export const DIFFICULT_GROUP_INDEX = 6;
 export const MAX_PAGE_INDEX = 29;
 export const MAX_WORD_INDEX = 19;
 
