@@ -6,6 +6,8 @@ import { createPickComplexityView } from './game-initial-view';
 import { createGamePlayView, setupGameRound } from './game-card';
 import { getGameData } from './game-data';
 import { currGame } from '.';
+import { store } from '../../redux/store';
+import { showMessage } from '../../components/authorization';
 
 function createGameViewContainer(book: IBookNav): HTMLElement {
   const node = document.createElement('div');
@@ -59,9 +61,16 @@ export function createGameNode(book: IBookNav): HTMLElement {
     setTimeout(async () => {
       showLoader(true);
       await getGameData(book);
-      currGame.resetRounds();
-      createGamePlayView();
-      setupGameRound();
+
+      const isNoWordsData: boolean = !store.getState().audiocallData.length;
+      if (isNoWordsData) {
+        showMessage('Не найдено СЛОВ доступных для игры');
+      } else {
+        currGame.resetRounds();
+        currGame.launchType = 'PAGE';
+        createGamePlayView();
+        setupGameRound();
+      }
       showLoader(false);
     }, 0);
   }

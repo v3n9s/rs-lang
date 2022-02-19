@@ -27,6 +27,7 @@ export function createPickComplexityView(gameViewContainer: HTMLElement): void {
       await getGameData({ group: index, page: NOT_SET });
       node.remove();
       currGame.resetRounds();
+      currGame.launchType = 'MENU';
       createGamePlayView();
       setupGameRound();
       showLoader(false);

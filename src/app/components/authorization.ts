@@ -12,7 +12,7 @@ function showLoader(show: Boolean): void {
   }
 }
 
-function showMessage(msg: string): void {
+export function showMessage(msg: string): void {
   const infoMessage = document.createElement('div');
   infoMessage.className = 'info';
   infoMessage.innerHTML = msg;

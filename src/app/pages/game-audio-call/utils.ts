@@ -23,8 +23,16 @@ export function shuffle<T>(arr: Array<T>): void {
 /**
  * Function returns array of randoms from 0 to maxValue including.
  */
-export function getArrayOfRandomNumber(length: number, maxValue: number): Array<number> {
+export function getArrayOfRandomNumber(
+  length: number,
+  maxValue: number,
+  includeVale: number | null = null,
+): Array<number> {
   const setOfRandoms: Set<number> = new Set();
+  if (includeVale !== null) {
+    setOfRandoms.add(includeVale);
+  }
+
   while (setOfRandoms.size < length) {
     setOfRandoms.add(Math.floor(Math.random() * maxValue + 1));
   }

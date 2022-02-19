@@ -60,20 +60,24 @@ export function createGameResultView(): void {
       </div>
     </div>`;
 
-  const nextGameBtn = document.createElement('button');
-  nextGameBtn.type = 'button';
-  nextGameBtn.className = 'default-btn next-game-btn';
-  nextGameBtn.textContent = 'дальше';
-  nextGameBtn.addEventListener('click', () => {
-    const gameViewContainer = gamePlayContainer.parentElement as HTMLDivElement;
-    gamePlayContainer.innerHTML = '';
-    createPickComplexityView(gameViewContainer);
-  });
-
   node.append(
     createList('game-play__wrong-items', currGame.wrongAnswer),
     createList('game-play__right-items', currGame.rightAnswer),
   );
 
-  gamePlayContainer.append(node, nextGameBtn);
+  if (currGame.launchType === 'MENU') {
+    const nextGameBtn = document.createElement('button');
+    nextGameBtn.type = 'button';
+    nextGameBtn.className = 'default-btn next-game-btn';
+    nextGameBtn.textContent = 'дальше';
+    nextGameBtn.addEventListener('click', () => {
+      const gameViewContainer = gamePlayContainer.parentElement as HTMLDivElement;
+      gamePlayContainer.innerHTML = '';
+      createPickComplexityView(gameViewContainer);
+    });
+
+    gamePlayContainer.append(node, nextGameBtn);
+  } else {
+    gamePlayContainer.append(node);
+  }
 }

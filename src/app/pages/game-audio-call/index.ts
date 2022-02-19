@@ -25,6 +25,7 @@ interface IAudiocalGameSetting {
   resetRounds: () => void;
   nextRound: () => void;
   isOver: () => boolean;
+  launchType: 'MENU' | 'PAGE' | null;
 }
 
 export const currGame: IAudiocalGameSetting = {
@@ -32,6 +33,7 @@ export const currGame: IAudiocalGameSetting = {
   rightAnswer: [],
   wrongAnswer: [],
   resetRounds() {
+    this.launchType = null;
     this.round = 0;
     this.rightAnswer.length = 0;
     this.wrongAnswer.length = 0;
@@ -44,4 +46,5 @@ export const currGame: IAudiocalGameSetting = {
   isOver() {
     return this.round === this.questionsMaxNumber;
   },
+  launchType: null,
 };
