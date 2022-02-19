@@ -192,7 +192,7 @@ export function createWordElement(
   function wordSound() {
     const audio = new Audio();
     audio.src = `https://rs-school-learnwords.herokuapp.com/${word.audio}`;
-    audio.autoplay = true;
+    audio.play();
   }
 
   const someWord = document.createElement('div');
