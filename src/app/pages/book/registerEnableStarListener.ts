@@ -16,10 +16,20 @@ export function registerEnableStarListener(
       learnedBtn.style.color = '#455d7a';
       indicatorContainer.style.backgroundColor = '#ffd0d0';
       onWordStateChange();
-      registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordStateChange);
-      registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordStateChange);
+      registerDisableStarListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
+      registerEnableTickListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
     });
   };
 }
-
-

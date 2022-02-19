@@ -16,8 +16,20 @@ export function registerEnableTickListener(
       learnedBtn.style.color = '#17b86b';
       indicatorContainer.style.backgroundColor = '#89f5c1';
       onWordStateChange();
-      registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordStateChange);
-      registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordStateChange);
+      registerDisableTickListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
+      registerEnableStarListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
     });
   };
 }

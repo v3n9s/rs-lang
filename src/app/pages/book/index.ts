@@ -319,7 +319,6 @@ export async function createBookGroup(group: number, page: number, rootElement: 
       let wordElement = createWordElement(word, onWordStateChange, userWord);
       wordsContainer.appendChild(wordElement);
     });
-
   } else {
     words.forEach((word) => {
       let wordElement = createWordElement(word, () => {});
@@ -345,7 +344,9 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
   <div class="games-menu">
   <p class="pagination-icon"><i class="fas fa-gamepad icon dropdown-btn"></i></p>
   <div class="dropdown-content">
-  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Аудио-вызов</a>
+  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${
+    BookParam.Page
+  }=${page}">Аудио-вызов</a>
   <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Спринт</a>
   </div>
   </div>
@@ -376,8 +377,6 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
 
   rootElement.appendChild(navigationBlock);
 }
-
-
 
 export const getBookPage: TPageComponent = (params) => {
   const bookLocation = params.group !== -1 ? ` р ${params.group + 1} / стр ${params.page + 1}` : '';

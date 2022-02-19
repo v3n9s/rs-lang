@@ -33,7 +33,6 @@ export const getDifficultWord = async (userId: string): Promise<Array<IWord>> =>
       },
     },
   );
-  
 
   switch (rawResponse.status) {
     case 401:
