@@ -1,18 +1,16 @@
 import { updatePage } from '../../components/page';
 import { TPageComponent } from '../../router';
-import { BookParam, HashPath, IBookNav, IWord } from '../../types';
+import { BookParam, HashPath, IWord } from '../../types';
 import { getWords } from '../../api/get-words';
 import { store } from '../../redux/store';
 import { createUserWord } from '../../api/create-user-word';
 import { getUserWord, UserWord } from '../../api/get-user-word';
 import { updateUserWord } from '../../api/update-user-word';
-import {
-  registerEnableStarListener,
-  registerEnableTickListener,
-} from '../book/registerEnableListener';
-import { createPageDifficultWord, createHeaderPageDifficultWord } from '../book/create-page-difficult-word';
+import { registerEnableStarListener } from './registerEnableStarListener';
+import { registerEnableTickListener } from './registerEnableTickListener';
+import { pageContent } from '../book/page-content';
 
-function createBookMain(rootElement: HTMLDivElement) {
+export function createBookMain(rootElement: HTMLDivElement) {
   const bookHeader = document.createElement('h1');
   bookHeader.className = 'book-header';
   bookHeader.innerText = 'Учебник RSLang';
@@ -86,15 +84,9 @@ export async function createDifficultWord(word: IWord, status: string) {
     const wordStatus = await getUserWord(userId, word.id);
 
     if (wordStatus === UserWord.Notfound) {
-      console.log('create started');
-
       createUserWord(userId, word.id, status);
-      console.log('create finisfed');
     } else {
-      console.log('update started');
-
       updateUserWord(userId, word.id, status);
-      console.log('update finished');
     }
   }
 }
@@ -103,14 +95,28 @@ export function registerDisableStarListener(
   word: IWord,
   learnedBtn: HTMLElement,
   indicatorContainer: HTMLDivElement,
+  onWordStateChange: () => void,
 ) {
   difficultBtn.onclick = () => {
     createDifficultWord(word, UserWord.Notset).then(() => {
       difficultBtn.style.color = '#455d7a';
       learnedBtn.style.color = '#455d7a';
       indicatorContainer.style.backgroundColor = '#ffff';
-      registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-      registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+      onWordStateChange();
+      registerEnableStarListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
+      registerEnableTickListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
     });
   };
 }
@@ -120,19 +126,49 @@ export function registerDisableTickListener(
   word: IWord,
   learnedBtn: HTMLElement,
   indicatorContainer: HTMLDivElement,
+  onWordStateChange: () => void,
 ) {
   learnedBtn.onclick = () => {
     createDifficultWord(word, UserWord.Notset).then(() => {
       difficultBtn.style.color = '#455d7a';
       learnedBtn.style.color = '#455d7a';
       indicatorContainer.style.backgroundColor = '#ffff';
-      registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
-      registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
+      onWordStateChange();
+      registerEnableTickListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
+      registerEnableStarListener(
+        difficultBtn,
+        word,
+        learnedBtn,
+        indicatorContainer,
+        onWordStateChange,
+      );
     });
   };
 }
 
-export function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElement {
+async function enrichWords(words: IWord[]) {
+  const enrichedWordsPromise: Promise<[IWord, UserWord]>[] = words.map((word) =>
+    getUserWord(store.getState().user.userId!, word.id).then(
+      (userWord: UserWord) => [word, userWord],
+      () => [word, UserWord.Notset],
+    ),
+  );
+
+  const enrichedWords = await Promise.all(enrichedWordsPromise);
+  return enrichedWords;
+}
+
+export function createWordElement(
+  word: IWord,
+  onWordStateChange: () => void,
+  userWord?: UserWord,
+): HTMLDivElement {
   const wordCard = document.createElement('div');
   wordCard.className = 'word-card';
   const indicatorContainer = document.createElement('div');
@@ -185,16 +221,52 @@ export function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElem
   if (userWord === UserWord.Difficult) {
     difficultBtn.style.color = '#f95959';
     indicatorContainer.style.backgroundColor = '#ffd0d0';
-    registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    registerDisableStarListener(
+      difficultBtn,
+      word,
+      learnedBtn,
+      indicatorContainer,
+      onWordStateChange,
+    );
+    registerEnableTickListener(
+      difficultBtn,
+      word,
+      learnedBtn,
+      indicatorContainer,
+      onWordStateChange,
+    );
   } else if (userWord === UserWord.Learned) {
     learnedBtn.style.color = '#17b86b';
     indicatorContainer.style.backgroundColor = '#89f5c1';
-    registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
-    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    registerDisableTickListener(
+      difficultBtn,
+      word,
+      learnedBtn,
+      indicatorContainer,
+      onWordStateChange,
+    );
+    registerEnableStarListener(
+      difficultBtn,
+      word,
+      learnedBtn,
+      indicatorContainer,
+      onWordStateChange,
+    );
   } else {
-    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer);
-    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer);
+    registerEnableStarListener(
+      difficultBtn,
+      word,
+      learnedBtn,
+      indicatorContainer,
+      onWordStateChange,
+    );
+    registerEnableTickListener(
+      difficultBtn,
+      word,
+      learnedBtn,
+      indicatorContainer,
+      onWordStateChange,
+    );
   }
 
   wordCard.appendChild(indicatorContainer);
@@ -204,7 +276,23 @@ export function createWordElement(word: IWord, userWord?: UserWord): HTMLDivElem
   return wordCard;
 }
 
-async function createBookGroup(group: number, page: number, rootElement: HTMLDivElement) {
+function createLearnedHeader(rootElement: HTMLDivElement) {
+  const containerText = document.createElement('div');
+  containerText.className = 'learned-page';
+  containerText.innerHTML = `
+  <p class="text-learned"><i class="far fa-check-circle"></i>Страница выучена!</p>
+  `;
+  rootElement.innerHTML = '';
+  rootElement.appendChild(containerText);
+}
+
+function isLearnedWords(enrichedWords: [IWord, UserWord][]) {
+  return enrichedWords.every(
+    ([, userWord]) => userWord === UserWord.Learned || userWord === UserWord.Difficult,
+  );
+}
+
+export async function createBookGroup(group: number, page: number, rootElement: HTMLDivElement) {
   const mainContent = document.createElement('div');
   mainContent.className = 'main-content';
 
@@ -213,21 +301,28 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
 
   const words = await getWords(group, page);
   if (store.getState().user.userId !== null) {
-    const enrichedWordsPromise: Promise<[IWord, UserWord]>[] = words.map((word) =>
-      getUserWord(store.getState().user.userId!, word.id).then(
-        (userWord: UserWord) => [word, userWord],
-        () => [word, UserWord.Notset],
-      ),
-    );
+    const enrichedWords = await enrichWords(words);
 
-    const enrichedWords = await Promise.all(enrichedWordsPromise);
+    const onWordStateChange = async () => {
+      if (isLearnedWords(enrichedWords)) {
+        const messageBlock = document.querySelector('.empty') as HTMLDivElement;
+        createLearnedHeader(messageBlock);
+        pageContent({ group, page });
+      } else {
+        const messageBlock = document.querySelector('.empty') as HTMLDivElement;
+        messageBlock.innerHTML = '';
+        pageContent({ group, page });
+      }
+    };
+    onWordStateChange();
     enrichedWords.forEach(([word, userWord]) => {
-      let wordElement = createWordElement(word, userWord);
+      let wordElement = createWordElement(word, onWordStateChange, userWord);
       wordsContainer.appendChild(wordElement);
     });
+
   } else {
     words.forEach((word) => {
-      let wordElement = createWordElement(word);
+      let wordElement = createWordElement(word, () => {});
       wordsContainer.appendChild(wordElement);
     });
   }
@@ -236,7 +331,7 @@ async function createBookGroup(group: number, page: number, rootElement: HTMLDiv
   rootElement.appendChild(mainContent);
 }
 
-function createNavigation(group: number, page: number, rootElement: HTMLDivElement) {
+export function createNavigation(group: number, page: number, rootElement: HTMLDivElement) {
   const navigationBlock = document.createElement('div');
   navigationBlock.className = 'navigation-block';
 
@@ -282,28 +377,7 @@ function createNavigation(group: number, page: number, rootElement: HTMLDivEleme
   rootElement.appendChild(navigationBlock);
 }
 
-const pageContent = (params: IBookNav): HTMLElement => {
-  const node = document.createElement('div');
-  node.className = 'main__container';
 
-  const { group, page } = params;
-  console.log('parse >', group, page);
-
-  if (group === -1) {
-    // запускаем book
-    createBookMain(node);
-    console.log('Book loaded');
-  } else if (params.group <= 5) {
-    createNavigation(group, page, node);
-    createBookGroup(group, page, node);
-    console.log('Book loaded on G:', group, ', P: ', page);
-  } else if (params.group === 6) {
-    createHeaderPageDifficultWord(node);
-    createPageDifficultWord(6, node);
-  }
-
-  return node;
-};
 
 export const getBookPage: TPageComponent = (params) => {
   const bookLocation = params.group !== -1 ? ` р ${params.group + 1} / стр ${params.page + 1}` : '';

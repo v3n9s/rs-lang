@@ -29,7 +29,7 @@ export async function createPageDifficultWord(group: number, rootElement: HTMLDi
   const words = await getDifficultWord(store.getState().user.userId!);
 
   words.forEach((word) => {
-    let wordElement = createWordElement(word, UserWord.Difficult);
+    let wordElement = createWordElement(word, () => {}, UserWord.Difficult);
     wordsContainer.appendChild(wordElement);
   });
 
