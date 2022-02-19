@@ -308,10 +308,14 @@ export async function createBookGroup(group: number, page: number, rootElement: 
         const messageBlock = document.querySelector('.empty') as HTMLDivElement;
         createLearnedHeader(messageBlock);
         pageContent({ group, page });
+        const games = document.querySelector('.dropdown-content') as HTMLDivElement;
+        games.style.display = 'none';
       } else {
         const messageBlock = document.querySelector('.empty') as HTMLDivElement;
         messageBlock.innerHTML = '';
         pageContent({ group, page });
+        const games = document.querySelector('.dropdown-content') as HTMLDivElement;
+        games.style.display = 'block';
       }
     };
     onWordStateChange();
