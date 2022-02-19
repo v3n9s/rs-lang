@@ -7,7 +7,7 @@ const audiocallDataSlice = createSlice({
   name: 'audiocallData',
   initialState: initialData,
   reducers: {
-    updateAudioCallData(state, action: PayloadAction<IWordData[]>) {
+    updateAudioCallData(state, action: PayloadAction<IWordData[]>): void {
       state.length = 0;
       state.push(...action.payload);
     },
