@@ -1,5 +1,5 @@
 import { store } from '../redux/store';
-import { removeUser, updateUser } from '../redux/user';
+import { removeUser, updateUser } from '../redux/user/index';
 import { createUser } from '../api/create-new-user';
 import { ILoginedUser, loginUser } from '../api/sign-in';
 
