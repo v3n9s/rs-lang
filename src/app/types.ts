@@ -16,3 +16,10 @@ export interface IBookNav {
   group: number;
   page: number;
 }
+
+export enum Endpoint {
+  Words = '/words',
+  Users = '/users',
+  Singin = '/signin',
+  Tokens = '/tokens',
+}

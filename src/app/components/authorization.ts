@@ -123,7 +123,6 @@ async function loginFormHandler(form: HTMLFormElement): Promise<void> {
           const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
           modal.remove();
 
-          showMessage(res.message);
           location.reload();
           break;
         case 403:
