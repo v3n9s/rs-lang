@@ -1,9 +1,64 @@
 import { updatePage } from '../../components/page';
 import { TPageComponent } from '../../router';
+import photoKon from '../../../assets/photo/1.jpg';
+import photoWer from '../../../assets/photo/2.jpg';
+import photoVen from '../../../assets/photo/3.jpg';
+
+interface ITeamMate {
+  name: string;
+  img: string;
+  colorClass: string;
+  github: string;
+  text: string;
+}
+
+const teamData: ITeamMate[] = [
+  {
+    name: 'Гончаров Константин',
+    img: photoKon,
+    colorClass: 'person__box_y',
+    github: 'https://github.com/khoncharov',
+    text: 'фото или аватарками и ссылками на гитхабы всех участников команды, описанием вклада в разработку',
+  },
+  {
+    name: 'Вероника',
+    img: photoWer,
+    colorClass: 'person__box_g',
+    github: 'https://github.com/WeronikaFed',
+    text: 'фото или аватарками и ссылками на гитхабы всех участников команды, описанием вклада в разработку',
+  },
+  {
+    name: 'Вениамин',
+    img: photoVen,
+    colorClass: 'person__box_n',
+    github: 'https://github.com/v3n9s',
+    text: 'фото или аватарками и ссылками на гитхабы всех участников команды, описанием вклада в разработку',
+  },
+];
+
+function personCard(data: ITeamMate): string {
+  return `
+    <div class="person__card">
+      <h2 class="person__name">
+        <a class="person__link" href="${data.github}"><i class="fab fa-github"></i></a>
+        ${data.name}
+      </h2>
+      <div class="person__photo-container">
+        <img class="person__photo" width="196" src="${data.img}">
+      </div>
+      <div class="person__box ${data.colorClass}"></div>
+      <p class="person__description">${data.text}<p>
+    </div>`;
+}
 
 const pageContent = (): HTMLElement => {
   const node = document.createElement('div');
   node.className = 'main__container';
+
+  let personsList = '';
+  teamData.forEach((member) => {
+    personsList += personCard(member);
+  });
 
   node.innerHTML = `
     <section class="home">
@@ -11,13 +66,7 @@ const pageContent = (): HTMLElement => {
         <h2 class="home__caption">Наша команда</h2>
       </div>
       <div class="about__content-container">
-        123
-        <br />
-        123
-        <br />
-        123
-        <br />
-        123
+        ${personsList}
       </div>
     </section>`;
 
