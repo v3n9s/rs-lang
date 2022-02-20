@@ -43,7 +43,6 @@ export const getDifficultWords = async (userId: string): Promise<Array<IWord>> =
     case 200:
       const data = await rawResponse.json();
       const responseWord = data[0].paginatedResults as IResponseWord[];
-      console.log(responseWord);
       const newWords = responseWord.map((word) => {
         return {
           id: word._id,
@@ -62,7 +61,6 @@ export const getDifficultWords = async (userId: string): Promise<Array<IWord>> =
           textExampleTranslate: word.textExampleTranslate,
         } as IWord;
       });
-      console.log(newWords);
       return newWords;
     default:
       throw new Error('Unknown Error!');
@@ -123,7 +121,6 @@ export const getEnrichedWords = async (
         const userWordStatus = word.userWord ? word.userWord!.difficulty : UserWord.Notfound;
         return [convertedWord, userWordStatus];
       });
-      console.log(newWords);
       return newWords;
     default:
       throw new Error('Unknown Error!');
