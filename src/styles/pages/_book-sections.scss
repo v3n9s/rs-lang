@@ -91,7 +91,8 @@
     .word-img {
       width: 100%;
       object-fit: cover;
-      padding-top: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
     }
   }
 
@@ -102,7 +103,7 @@
     font-family: $font-c;
     line-height: 28px;
     .meaning {
-      padding-left: 30px;
+      padding-left: 17px;
       li {
         list-style-type: circle;
       }
