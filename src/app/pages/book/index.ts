@@ -8,6 +8,7 @@ import { getUserWord, UserWord } from '../../api/get-user-word';
 import { updateUserWord } from '../../api/update-user-word';
 import { registerEnableStarListener } from './registerEnableStarListener';
 import { registerEnableTickListener } from './registerEnableTickListener';
+import { getEnrichedWords } from '../../api/user-difficult-words';
 import { pageContent } from '../book/page-content';
 
 export function createBookMain(rootElement: HTMLDivElement) {
@@ -76,7 +77,7 @@ export function createBookMain(rootElement: HTMLDivElement) {
   return rootElement;
 }
 
-export async function createDifficultWord(word: IWord, status: string) {
+export async function changeWordStatus(word: IWord, status: string) {
   if (store.getState().user.userId === null) {
     return Promise.reject('err');
   } else {
@@ -84,9 +85,9 @@ export async function createDifficultWord(word: IWord, status: string) {
     const wordStatus = await getUserWord(userId, word.id);
 
     if (wordStatus === UserWord.Notfound) {
-      createUserWord(userId, word.id, status);
+      await createUserWord(userId, word.id, status);
     } else {
-      updateUserWord(userId, word.id, status);
+      await updateUserWord(userId, word.id, status);
     }
   }
 }
@@ -95,29 +96,18 @@ export function registerDisableStarListener(
   word: IWord,
   learnedBtn: HTMLElement,
   indicatorContainer: HTMLDivElement,
-  onWordStateChange: () => void,
+  onWordChange: () => void,
 ) {
-  difficultBtn.onclick = () => {
-    createDifficultWord(word, UserWord.Notset).then(() => {
-      difficultBtn.style.color = '#455d7a';
-      learnedBtn.style.color = '#455d7a';
-      indicatorContainer.style.backgroundColor = '#ffff';
-      onWordStateChange();
-      registerEnableStarListener(
-        difficultBtn,
-        word,
-        learnedBtn,
-        indicatorContainer,
-        onWordStateChange,
-      );
-      registerEnableTickListener(
-        difficultBtn,
-        word,
-        learnedBtn,
-        indicatorContainer,
-        onWordStateChange,
-      );
-    });
+  difficultBtn.onclick = async () => {
+    difficultBtn.onclick = null;
+    learnedBtn.onclick = null;
+    await changeWordStatus(word, UserWord.Notset);
+    await onWordChange();
+    difficultBtn.style.color = '#455d7a';
+    learnedBtn.style.color = '#455d7a';
+    indicatorContainer.style.backgroundColor = '#ffff';
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
+    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   };
 }
 
@@ -126,47 +116,24 @@ export function registerDisableTickListener(
   word: IWord,
   learnedBtn: HTMLElement,
   indicatorContainer: HTMLDivElement,
-  onWordStateChange: () => void,
+  onWordChange: () => void,
 ) {
-  learnedBtn.onclick = () => {
-    createDifficultWord(word, UserWord.Notset).then(() => {
-      difficultBtn.style.color = '#455d7a';
-      learnedBtn.style.color = '#455d7a';
-      indicatorContainer.style.backgroundColor = '#ffff';
-      onWordStateChange();
-      registerEnableTickListener(
-        difficultBtn,
-        word,
-        learnedBtn,
-        indicatorContainer,
-        onWordStateChange,
-      );
-      registerEnableStarListener(
-        difficultBtn,
-        word,
-        learnedBtn,
-        indicatorContainer,
-        onWordStateChange,
-      );
-    });
+  learnedBtn.onclick = async () => {
+    difficultBtn.onclick = null;
+    learnedBtn.onclick = null;
+    await changeWordStatus(word, UserWord.Notset);
+    await onWordChange();
+    difficultBtn.style.color = '#455d7a';
+    learnedBtn.style.color = '#455d7a';
+    indicatorContainer.style.backgroundColor = '#ffff';
+    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   };
-}
-
-async function enrichWords(words: IWord[]) {
-  const enrichedWordsPromise: Promise<[IWord, UserWord]>[] = words.map((word) =>
-    getUserWord(store.getState().user.userId!, word.id).then(
-      (userWord: UserWord) => [word, userWord],
-      () => [word, UserWord.Notset],
-    ),
-  );
-
-  const enrichedWords = await Promise.all(enrichedWordsPromise);
-  return enrichedWords;
 }
 
 export function createWordElement(
   word: IWord,
-  onWordStateChange: () => void,
+  onWordChange: () => void,
   userWord?: UserWord,
 ): HTMLDivElement {
   const wordCard = document.createElement('div');
@@ -221,52 +188,16 @@ export function createWordElement(
   if (userWord === UserWord.Difficult) {
     difficultBtn.style.color = '#f95959';
     indicatorContainer.style.backgroundColor = '#ffd0d0';
-    registerDisableStarListener(
-      difficultBtn,
-      word,
-      learnedBtn,
-      indicatorContainer,
-      onWordStateChange,
-    );
-    registerEnableTickListener(
-      difficultBtn,
-      word,
-      learnedBtn,
-      indicatorContainer,
-      onWordStateChange,
-    );
+    registerDisableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
+    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   } else if (userWord === UserWord.Learned) {
     learnedBtn.style.color = '#17b86b';
     indicatorContainer.style.backgroundColor = '#89f5c1';
-    registerDisableTickListener(
-      difficultBtn,
-      word,
-      learnedBtn,
-      indicatorContainer,
-      onWordStateChange,
-    );
-    registerEnableStarListener(
-      difficultBtn,
-      word,
-      learnedBtn,
-      indicatorContainer,
-      onWordStateChange,
-    );
+    registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   } else {
-    registerEnableStarListener(
-      difficultBtn,
-      word,
-      learnedBtn,
-      indicatorContainer,
-      onWordStateChange,
-    );
-    registerEnableTickListener(
-      difficultBtn,
-      word,
-      learnedBtn,
-      indicatorContainer,
-      onWordStateChange,
-    );
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
+    registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   }
 
   wordCard.appendChild(indicatorContainer);
@@ -292,6 +223,22 @@ function isLearnedWords(enrichedWords: [IWord, UserWord][]) {
   );
 }
 
+function changeDropDownContent(group: number, page: number) {
+  return async () => {
+    const enrichedWordss = await getEnrichedWords(store.getState().user.userId!, group, page);
+    const messageBlock = document.querySelector('.empty') as HTMLDivElement;
+    const games = document.querySelector('.dropdown-content') as HTMLDivElement;
+
+    if (isLearnedWords(enrichedWordss)) {
+      createLearnedHeader(messageBlock);
+      games.classList.remove('dropdown-on');
+    } else {
+      messageBlock.innerHTML = '';
+      games.classList.add('dropdown-on');
+    }
+  };
+}
+
 export async function createBookGroup(group: number, page: number, rootElement: HTMLDivElement) {
   const mainContent = document.createElement('div');
   mainContent.className = 'main-content';
@@ -299,33 +246,21 @@ export async function createBookGroup(group: number, page: number, rootElement: 
   const wordsContainer = document.createElement('div');
   wordsContainer.className = 'words-container';
 
-  const words = await getWords(group, page);
   if (store.getState().user.userId !== null) {
-    const enrichedWords = await enrichWords(words);
+    const enrichedWords = await getEnrichedWords(store.getState().user.userId!, group, page);
 
-    const onWordStateChange = async () => {
-      if (isLearnedWords(enrichedWords)) {
-        const messageBlock = document.querySelector('.empty') as HTMLDivElement;
-        createLearnedHeader(messageBlock);
-        pageContent({ group, page });
-        const games = document.querySelector('.dropdown-content') as HTMLDivElement;
-        games.style.display = 'none';
-      } else {
-        const messageBlock = document.querySelector('.empty') as HTMLDivElement;
-        messageBlock.innerHTML = '';
-        pageContent({ group, page });
-        const games = document.querySelector('.dropdown-content') as HTMLDivElement;
-        games.style.display = 'block';
-      }
-    };
-    onWordStateChange();
+    const onWordStateChange = changeDropDownContent(group, page);
+    await onWordStateChange();
     enrichedWords.forEach(([word, userWord]) => {
       let wordElement = createWordElement(word, onWordStateChange, userWord);
       wordsContainer.appendChild(wordElement);
     });
   } else {
+    const words = await getWords(group, page);
     words.forEach((word) => {
       let wordElement = createWordElement(word, () => {});
+      const games = document.querySelector('.dropdown-content') as HTMLDivElement;
+      games.classList.add('dropdown-on');
       wordsContainer.appendChild(wordElement);
     });
   }
@@ -348,9 +283,7 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
   <div class="games-menu">
   <p class="pagination-icon"><i class="fas fa-gamepad icon dropdown-btn"></i></p>
   <div class="dropdown-content">
-  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${
-    BookParam.Page
-  }=${page}">Аудио-вызов</a>
+  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Аудио-вызов</a>
   <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Спринт</a>
   </div>
   </div>
@@ -370,8 +303,8 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
 
   const prevBtn = navigationBlock.querySelector('#previous-page') as HTMLButtonElement;
   prevBtn.addEventListener('click', () => {
-    if (page <= 1) {
-      location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=1`;
+    if (page < 1) {
+      location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=0`;
     } else {
       location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
         page - 1

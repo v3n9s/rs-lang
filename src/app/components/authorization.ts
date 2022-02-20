@@ -1,5 +1,5 @@
 import { store } from '../redux/store';
-import { removeUser, updateUser } from '../redux/user/index';
+import { removeUser, updateUser } from '../redux/user';
 import { createUser } from '../api/create-new-user';
 import { ILoginedUser, loginUser } from '../api/sign-in';
 
@@ -126,6 +126,7 @@ async function loginFormHandler(form: HTMLFormElement): Promise<void> {
           showMessage(res.message);
           const authBtn = document.querySelector('#auth-btn') as HTMLButtonElement;
           updateAuthButton(authBtn);
+          location.reload();
           break;
         case 403:
           showMessage(res.message);
@@ -193,6 +194,7 @@ export function authButtonHandler(node: HTMLElement): void {
     if (store.getState().user.token) {
       store.dispatch(removeUser());
       updateAuthButton(authBtn);
+      location.reload();
     } else {
       openAuthModal();
     }

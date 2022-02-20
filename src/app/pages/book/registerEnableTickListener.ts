@@ -1,6 +1,6 @@
 import { IWord } from '../../types';
 import { UserWord } from '../../api/get-user-word';
-import { createDifficultWord, registerDisableTickListener } from './index';
+import { changeWordStatus, registerDisableTickListener } from './index';
 import { registerEnableStarListener } from './registerEnableStarListener';
 
 export function registerEnableTickListener(
@@ -8,28 +8,17 @@ export function registerEnableTickListener(
   word: IWord,
   learnedBtn: HTMLElement,
   indicatorContainer: HTMLDivElement,
-  onWordStateChange: () => void,
+  onWordChange: () => void,
 ) {
-  learnedBtn.onclick = () => {
-    createDifficultWord(word, UserWord.Learned).then(() => {
-      difficultBtn.style.color = '#455d7a';
-      learnedBtn.style.color = '#17b86b';
-      indicatorContainer.style.backgroundColor = '#89f5c1';
-      onWordStateChange();
-      registerDisableTickListener(
-        difficultBtn,
-        word,
-        learnedBtn,
-        indicatorContainer,
-        onWordStateChange,
-      );
-      registerEnableStarListener(
-        difficultBtn,
-        word,
-        learnedBtn,
-        indicatorContainer,
-        onWordStateChange,
-      );
-    });
+  learnedBtn.onclick = async () => {
+    difficultBtn.onclick = null;
+    learnedBtn.onclick = null;
+    await changeWordStatus(word, UserWord.Learned);
+    await onWordChange();
+    difficultBtn.style.color = '#455d7a';
+    learnedBtn.style.color = '#17b86b';
+    indicatorContainer.style.backgroundColor = '#89f5c1';
+    registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
+    registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   };
 }

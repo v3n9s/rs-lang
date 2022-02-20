@@ -1,8 +1,8 @@
 import { createWordElement } from '../book/index';
-import { getDifficultWord } from '../../api/user-difficult-words';
+import { getDifficultWords } from '../../api/user-difficult-words';
 import { store } from '../../redux/store';
 import { UserWord } from '../../api/get-user-word';
-import { HashPath } from '../../types';
+import { HashPath, IWord } from '../../types';
 
 export function createHeaderPageDifficultWord(rootElement: HTMLDivElement) {
   const navigationBlock = document.createElement('div');
@@ -26,9 +26,9 @@ export async function createPageDifficultWord(group: number, rootElement: HTMLDi
   const wordsContainer = document.createElement('div');
   wordsContainer.className = 'words-container';
 
-  const words = await getDifficultWord(store.getState().user.userId!);
+  const words = await getDifficultWords(store.getState().user.userId!);
 
-  words.forEach((word) => {
+  words.forEach((word: IWord) => {
     let wordElement = createWordElement(word, () => {}, UserWord.Difficult);
     wordsContainer.appendChild(wordElement);
   });

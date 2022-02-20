@@ -3,8 +3,8 @@ import { createBookMain } from './index';
 import { createNavigation } from './index';
 import { createBookGroup } from './index';
 import {
-  createPageDifficultWord,
-  createHeaderPageDifficultWord,
+  createPageDifficultWord as createDifficultBookGroup,
+  createHeaderPageDifficultWord as createDifficultNavigation,
 } from '../book/create-page-difficult-word';
 
 export const pageContent = (params: IBookNav): HTMLElement => {
@@ -17,8 +17,8 @@ export const pageContent = (params: IBookNav): HTMLElement => {
     createNavigation(group, page, node);
     createBookGroup(group, page, node);
   } else if (params.group === 6) {
-    createHeaderPageDifficultWord(node);
-    createPageDifficultWord(6, node);
+    createDifficultNavigation(node);
+    createDifficultBookGroup(6, node);
   }
 
   return node;
