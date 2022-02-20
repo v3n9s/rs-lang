@@ -3,6 +3,7 @@ import { getDifficultWords } from '../../api/user-difficult-words';
 import { store } from '../../redux/store';
 import { UserWord } from '../../api/get-user-word';
 import { HashPath, IWord } from '../../types';
+import { BookParam } from '../../types';
 
 export function createHeaderPageDifficultWord(rootElement: HTMLDivElement) {
   const navigationBlock = document.createElement('div');
@@ -11,6 +12,15 @@ export function createHeaderPageDifficultWord(rootElement: HTMLDivElement) {
   navigationBlock.innerHTML = `
         <p class="pagination-icon"><i class="far fa-arrow-alt-circle-up" id="back-sections"></i></p>
         <p class="page-info">Сложные слова</p>
+        <div class="games-menu">
+        <p class="pagination-icon"><i class="fas fa-gamepad icon dropdown-btn"></i></p>
+        <div class="dropdown-content dropdown-on">
+          <a href="${HashPath.audioCallPage}?${BookParam.Group}=${6}&${BookParam.Page}=${0}">
+            Аудио-вызов
+          </a>
+        <a href="${HashPath.sprintPage}?${BookParam.Group}=${6}&${BookParam.Page}=${0}">Спринт</a>
+        </div>
+        </div>
         <div class="empty"></div>
         `;
 

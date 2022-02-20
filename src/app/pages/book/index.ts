@@ -10,8 +10,10 @@ import { registerEnableStarListener } from './registerEnableStarListener';
 import { registerEnableTickListener } from './registerEnableTickListener';
 import { getEnrichedWords } from '../../api/user-difficult-words';
 import { pageContent } from '../book/page-content';
+import { MAX_PAGE_INDEX } from '../../const';
 
 export function createBookMain(rootElement: HTMLDivElement) {
+  const userId = store.getState().user.userId;
   const bookHeader = document.createElement('h1');
   bookHeader.className = 'book-header';
   bookHeader.innerText = 'Учебник RSLang';
@@ -29,7 +31,7 @@ export function createBookMain(rootElement: HTMLDivElement) {
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=3&${BookParam.Page}=0">Раздел 4</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=4&${BookParam.Page}=0">Раздел 5</a></li>
       <li><a href="${HashPath.bookPage}?${BookParam.Group}=5&${BookParam.Page}=0">Раздел 6</a></li>
-      <li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=0">Сложные слова</a></li>
+      ${ userId ? `<li><a href="${HashPath.bookPage}?${BookParam.Group}=6&${BookParam.Page}=0">Сложные слова</a></li>` : ''}
     </ol>
     `;
   const descriptionBook = document.createElement('div');
@@ -201,7 +203,7 @@ export function createWordElement(
     indicatorContainer.style.backgroundColor = '#89f5c1';
     registerDisableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
     registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
-  } else {
+  } else if (userWord !== undefined) {
     registerEnableStarListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
     registerEnableTickListener(difficultBtn, word, learnedBtn, indicatorContainer, onWordChange);
   }
@@ -305,19 +307,15 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
   const nextBtn = navigationBlock.querySelector('#next-page') as HTMLButtonElement;
   nextBtn.addEventListener('click', () => {
     location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
-      page + 1
+      page >= MAX_PAGE_INDEX ? MAX_PAGE_INDEX : page + 1
     }`;
   });
 
   const prevBtn = navigationBlock.querySelector('#previous-page') as HTMLButtonElement;
   prevBtn.addEventListener('click', () => {
-    if (page < 1) {
-      location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=0`;
-    } else {
-      location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
-        page - 1
-      }`;
-    }
+    location.href = `${HashPath.bookPage}?${BookParam.Group}=${group}&${BookParam.Page}=${
+      page < 1 ? 0 : page - 1
+    }`;
   });
 
   rootElement.appendChild(navigationBlock);
