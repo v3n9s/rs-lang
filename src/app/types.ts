@@ -22,4 +22,5 @@ export enum Endpoint {
   Users = '/users',
   Singin = '/signin',
   Tokens = '/tokens',
+  AggregatedWords = '/aggregatedwords',
 }

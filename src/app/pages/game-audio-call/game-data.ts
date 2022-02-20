@@ -1,10 +1,16 @@
-import { showMessage } from '../../components/authorization';
-import { MAX_PAGE_INDEX, NOT_SET } from '../../const';
+import {
+  DIFFICULT_GROUP_INDEX,
+  GROUPS_COUNT,
+  MAX_PAGE_INDEX,
+  NOT_SET,
+  WORDS_PER_PAGE,
+} from '../../const';
 import { updateAudioCallData } from '../../redux/audiocall/data';
 import { store } from '../../redux/store';
 import { IBookNav } from '../../types';
-import { getWordsList } from './request';
-import { IWordData } from './types';
+import { MAX_QUESTIONS_NUM } from './const';
+import { getUsersAggregatedWordsList, getWordsList } from './request';
+import { IUserAggregatedWordData, IWordData } from './types';
 import { getArrayOfRandomNumber, shuffle } from './utils';
 
 function composeWordsArray(words: IWordData[], options: IWordData[]): IWordData[] {
@@ -19,9 +25,59 @@ function composeWordsArray(words: IWordData[], options: IWordData[]): IWordData[
   return result;
 }
 
-async function getRandomData(book: IBookNav): Promise<void> {
-  console.log('..................random'); // -------------------------------------------------------
+function converData(data: IUserAggregatedWordData[]): IWordData[] {
+  return data.map((item) => {
+    return {
+      id: item._id,
+      group: item.group,
+      page: item.page,
+      word: item.word,
+      image: item.image,
+      audio: item.audio,
+      audioMeaning: item.audioExample,
+      audioExample: item.audioMeaning,
+      textMeaning: item.textMeaning,
+      textExample: item.textExample,
+      transcription: item.transcription,
+      textExampleTranslate: item.textExampleTranslate,
+      textMeaningTranslate: item.textMeaningTranslate,
+      wordTranslate: item.wordTranslate,
+    };
+  });
+}
 
+function removeWordsRepetitions(words: IWordData[], target: IWordData[]): IWordData[] {
+  const wordsId = words.map((item) => item.id);
+  const result = target.filter((item) => !wordsId.includes(item.id));
+  return result;
+}
+
+async function getRandomOptionList(): Promise<IWordData[]> {
+  const randomGroup = Math.floor(Math.random() * GROUPS_COUNT);
+  const randomPagesCount = 3;
+  const pages = getArrayOfRandomNumber(randomPagesCount, MAX_PAGE_INDEX);
+
+  const data = await Promise.all([
+    getWordsList(randomGroup, pages[0]),
+    getWordsList(randomGroup, pages[1]),
+    getWordsList(randomGroup, pages[2]),
+  ]);
+
+  if (data.every((res) => res.status === 200)) {
+    const wordsList: IWordData[] = [];
+    data.forEach((res) => {
+      wordsList.push(...res.payload);
+    });
+
+    shuffle(wordsList);
+
+    return wordsList;
+  }
+
+  return [];
+}
+
+async function getRandomData(book: IBookNav): Promise<void> {
   const randomPagesCount = 3;
   const pages = getArrayOfRandomNumber(randomPagesCount, MAX_PAGE_INDEX);
   const data = await Promise.all([
@@ -40,25 +96,14 @@ async function getRandomData(book: IBookNav): Promise<void> {
 
     store.dispatch(updateAudioCallData(wordsList));
   } else {
-    showMessage('Ошибка при загрузке слов');
+    store.dispatch(updateAudioCallData([]));
   }
 }
 
-async function getDataByPage(book: IBookNav): Promise<void> {
-  console.log(book);
-
-  // TODO: 1. Empty array
-  // TODO: 2. group 0-5
-  // TODO: 3. group hard words
-
-  // DATA in store should be
-  //  1. WORD [index = 0]
-  //  2. OPTIONS [indicies = 1 2 3 4] ... and so on
-  console.log('..................by page'); // -------------------------------------------------------
+async function getDataByGroupPage(book: IBookNav): Promise<void> {
   const targetPage = book.page;
   const randomPagesCount = 3;
   const pages = getArrayOfRandomNumber(randomPagesCount, MAX_PAGE_INDEX, targetPage);
-  console.log(pages);
 
   const data = await Promise.all([
     getWordsList(book.group, pages[0]),
@@ -67,7 +112,6 @@ async function getDataByPage(book: IBookNav): Promise<void> {
   ]);
 
   if (data.every((res) => res.status === 200)) {
-    const MAX_QUESTIONS_NUM = 12;
     const wordsList: IWordData[] = [...data[0].payload.slice(0, MAX_QUESTIONS_NUM)];
     const optionsList: IWordData[] = [
       ...data[0].payload.slice(MAX_QUESTIONS_NUM),
@@ -78,16 +122,65 @@ async function getDataByPage(book: IBookNav): Promise<void> {
     shuffle(wordsList);
     shuffle(optionsList);
 
-    console.log(wordsList);
-    console.log(optionsList);
-
     const result = composeWordsArray(wordsList, optionsList);
-
-    console.log(result);
 
     store.dispatch(updateAudioCallData(result));
   } else {
-    showMessage('Ошибка при загрузке слов');
+    store.dispatch(updateAudioCallData([]));
+  }
+}
+
+async function getAuthDataByGroupPage(book: IBookNav): Promise<void> {
+  if (book.group === DIFFICULT_GROUP_INDEX) {
+    const filter = '{"userWord.difficulty":"difficult"}';
+
+    const res = await getUsersAggregatedWordsList(filter);
+
+    if (res.status === 200) {
+      const difficultWordsList = converData(res.payload.slice(0, MAX_QUESTIONS_NUM));
+      const wordsInRound = difficultWordsList.length;
+      if (wordsInRound > 0) {
+        shuffle(difficultWordsList);
+
+        const rawOptionsList = await getRandomOptionList();
+        const optionsList = removeWordsRepetitions(difficultWordsList, rawOptionsList);
+        shuffle(optionsList);
+
+        const result = composeWordsArray(difficultWordsList, optionsList);
+
+        store.dispatch(updateAudioCallData(result));
+      } else {
+        store.dispatch(updateAudioCallData([]));
+      }
+    } else {
+      store.dispatch(updateAudioCallData([]));
+    }
+  } else {
+    const filter = '{"$or":[{"userWord.difficulty":null},{"userWord.difficulty":"notset"}]}';
+    const wordsPerPage = (book.page + 1) * WORDS_PER_PAGE + 10; // 10 exra to include page mixin -> ...444545555...
+
+    const res = await getUsersAggregatedWordsList(filter, book.group, undefined, wordsPerPage);
+    if (res.status === 200) {
+      const rawWords = converData(res.payload).filter((item) => item.page <= book.page);
+      const difficultWordsList = rawWords.slice(-MAX_QUESTIONS_NUM);
+
+      const wordsInRound = difficultWordsList.length;
+      if (wordsInRound > 0) {
+        shuffle(difficultWordsList);
+
+        const rawOptionsList = await getRandomOptionList();
+        const optionsList = removeWordsRepetitions(difficultWordsList, rawOptionsList);
+        shuffle(optionsList);
+
+        const result = composeWordsArray(difficultWordsList, optionsList);
+
+        store.dispatch(updateAudioCallData(result));
+      } else {
+        store.dispatch(updateAudioCallData([]));
+      }
+    } else {
+      store.dispatch(updateAudioCallData([]));
+    }
   }
 }
 
@@ -105,7 +198,7 @@ export async function getGameData(book: IBookNav): Promise<void> {
       await getRandomData(book);
     } else {
       // - from BOOK PAGE -
-      throw new Error('Not implemented');
+      await getAuthDataByGroupPage(book);
     }
   } else {
     // --- UNauth USER CASE ---
@@ -114,7 +207,7 @@ export async function getGameData(book: IBookNav): Promise<void> {
       await getRandomData(book);
     } else {
       // - from BOOK PAGE -
-      await getDataByPage(book);
+      await getDataByGroupPage(book);
     }
   }
 }

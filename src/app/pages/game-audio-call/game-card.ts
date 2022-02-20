@@ -26,7 +26,6 @@ export function setupGameRound(): void {
   addACGameKeyboardAction(false);
 
   const gameData = store.getState().audiocallData;
-  console.log('round set for >', currGame.round); // -----------------------------------
 
   const nextRoundBtn = document.querySelector('#next-round-btn') as HTMLButtonElement;
   nextRoundBtn.disabled = true;
@@ -134,9 +133,6 @@ export function createGamePlayView(): void {
   nextRoundBtn.addEventListener('click', () => {
     nextRoundBtn.disabled = true;
     currGame.nextRound();
-
-    console.log(currGame); /// -----------------------------
-    console.log('is over >', currGame.isOver()); /// -----------------------------
 
     if (currGame.isOver()) {
       addACGameKeyboardAction(false);
