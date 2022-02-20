@@ -151,6 +151,8 @@ export function createWordElement(
   `;
   const wordImg = document.createElement('img');
   wordImg.className = 'word-img';
+  wordImg.width = 200;
+  wordImg.height = 200;
   wordImg.src = `https://rs-school-learnwords.herokuapp.com/${word.image}`;
 
   imageContainer.appendChild(userChoose);
@@ -166,9 +168,8 @@ export function createWordElement(
   someWord.className = 'some-word';
   someWord.innerHTML = `
   <p><b>${word.word}</b> - ${word.wordTranslate}</p>
-  <hr>
-  <br>  
-  <p><i class="far fa-play-circle word-sound"></i> / ${word.transcription} /</p>
+  <hr>  
+  <p><i class="far fa-play-circle word-sound btn-for-book"></i> / ${word.transcription} /</p>
   <p class="specification">Использование:</p>
   <ul class="meaning">
   <li>${word.textMeaning}</li>
@@ -211,7 +212,7 @@ function createLearnedHeader(rootElement: HTMLDivElement) {
   const containerText = document.createElement('div');
   containerText.className = 'learned-page';
   containerText.innerHTML = `
-  <p class="text-learned"><i class="far fa-check-circle"></i>Страница выучена!</p>
+  <p class="text-learned"><i class="far fa-check-circle"></i> Страница выучена!</p>
   `;
   rootElement.innerHTML = '';
   rootElement.appendChild(containerText);
@@ -283,7 +284,9 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
   <div class="games-menu">
   <p class="pagination-icon"><i class="fas fa-gamepad icon dropdown-btn"></i></p>
   <div class="dropdown-content">
-  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Аудио-вызов</a>
+    <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">
+      Аудио-вызов
+    </a>
   <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Спринт</a>
   </div>
   </div>
