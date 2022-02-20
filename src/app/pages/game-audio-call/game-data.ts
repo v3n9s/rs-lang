@@ -162,6 +162,7 @@ async function getAuthDataByGroupPage(book: IBookNav): Promise<void> {
     const res = await getUsersAggregatedWordsList(filter, book.group, undefined, wordsPerPage);
     if (res.status === 200) {
       const rawWords = converData(res.payload).filter((item) => item.page <= book.page);
+
       const difficultWordsList = rawWords.slice(-MAX_QUESTIONS_NUM);
 
       const wordsInRound = difficultWordsList.length;

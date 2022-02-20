@@ -1,24 +1,40 @@
-.words-container {
-  width: 80%;
+.main-content {
   margin: 0 auto;
 }
 
+.words-container {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
 .navigation-block {
+  margin-bottom: 16px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: $white;
   @include shadow;
-  font-size: $font_m;
+  @include font($font_ui, $font_m, $navy, 150%, $font_regular);
   .empty {
     width: 40%;
   }
   .pagination-icon {
     display: inline;
-    color: $navy;
+    color: $navy_light;
     font-size: $font_l;
+    cursor: pointer;
+    transition: $tr_time;
+  }
+
+  .pagination-icon:hover {
+    color: $black;
+  }
+
+  .pagination-icon:active {
+    color: $green_dark;
   }
 }
 
@@ -30,10 +46,11 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: $gray_light;
+  background-color: $white;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  border-radius: 10px;
+  @include shadow;
+  z-index: 10;
 }
 
 .dropdown-content a {
@@ -41,6 +58,8 @@
   padding: 12px 16px;
   text-decoration: none;
   display: inline-block;
+  border-radius: 10px;
+  width: 100%;
 }
 
 .games-menu:hover .dropdown-on {
@@ -52,35 +71,39 @@
 }
 
 .word-card {
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: $white;
   @include shadow;
-  margin: 10px;
   padding: 15px;
+  max-width: 800px;
 
   .indicator {
     width: 3%;
+    border-radius: 10px;
   }
 
   .image-container {
     width: 40%;
     .word-img {
       width: 100%;
-      padding-top: 10px;
+      object-fit: cover;
+      margin-top: 15px;
+      border-radius: 5px;
     }
   }
 
   .some-word {
     width: 52%;
-    padding: 5px;
+
     font-size: $font_s;
     font-family: $font-c;
     line-height: 28px;
     .meaning {
-      padding-left: 30px;
+      padding-left: 17px;
       li {
         list-style-type: circle;
       }
@@ -90,6 +113,7 @@
 
 .user-choose {
   text-align: center;
+  margin-top: 5px;
 }
 
 .user-difficult,
@@ -104,12 +128,18 @@
 }
 
 .learned-page {
-  @include shadow;
   width: 70%;
   height: 100%;
 }
 
 .text-learned {
   color: $green_dark;
-  padding: 10px;
+}
+
+.btn-for-book {
+  cursor: pointer;
+}
+
+.icon-choose {
+  cursor: pointer;
 }

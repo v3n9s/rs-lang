@@ -1,7 +1,7 @@
 import { store } from '../redux/store';
 import { IWord } from '../types';
 import { UserWord } from './get-user-word';
-import { WORD_PER_PAGE } from '../const';
+import { WORDS_PER_PAGE } from '../const';
 
 interface IResponseWord {
   _id: string;
@@ -84,7 +84,7 @@ export const getEnrichedWords = async (
 
   const rawResponse = await fetch(
     `https://rs-school-learnwords.herokuapp.com/users/${userId}/aggregatedWords?group=${group}&page=${page}
-  &wordsPerPage=${WORD_PER_PAGE}}
+  &wordsPerPage=${WORDS_PER_PAGE}}
   &filter=${JSON.stringify(filter)}`,
     {
       method: 'GET',

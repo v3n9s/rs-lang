@@ -64,10 +64,15 @@ export function createBookMain(rootElement: HTMLDivElement) {
     <br> 
     <div class="rules">  
     <p class="icon"><i class="fas fa-gamepad"></i></p> 
-    <p class="meaning">Мини-игры запускаются из меню, в ней можно выбрать один из шести уровней сложности, которые отличаются тем, слова какого из шести раздлов коллекции исходных данных в ней задействованы
-    если мини-игра запускается со страницы учебника, в ней используются слова из той страницы учебника, на которой размещена ссылка на игру. 
-    Если размещённых на странице слов для игры недостаточно, задействуются слова с предыдущих страниц. Если предыдущих страниц нет или недостаточно, игра завершается досрочно, когда закончатся все доступные слова
-    Игры в изученых разделах - недоступны.</p>
+    <p class="meaning">
+      При запуске мини-игры из меню, в ней можно выбрать один из шести уровней сложности. Слова
+      выбранного раздела будут выводиться случайным образом. Всего игра состоит из двенадцать раундов.
+      <br /><br />При запуске мини-игры со страницы учебника, будут использоваться слова той страницы
+      учебника, на которой была вызвана игра. В игре не участвуют сложные и выученные слова. Если
+      размещенных на странице слов для игры недостаточно, то задействуются слова с предыдущих страниц.
+      Если предыдущих страниц нет или недостаточно, игра завершается досрочно, когда закончатся все
+      доступные слова. Максимальное количество раундов - 12. На изученных страницах игры не доступны.
+    </p>
     </div>
     `;
   bookContent.appendChild(bookSections);
@@ -151,6 +156,8 @@ export function createWordElement(
   `;
   const wordImg = document.createElement('img');
   wordImg.className = 'word-img';
+  wordImg.width = 200;
+  wordImg.height = 200;
   wordImg.src = `https://rs-school-learnwords.herokuapp.com/${word.image}`;
 
   imageContainer.appendChild(userChoose);
@@ -166,9 +173,8 @@ export function createWordElement(
   someWord.className = 'some-word';
   someWord.innerHTML = `
   <p><b>${word.word}</b> - ${word.wordTranslate}</p>
-  <hr>
-  <br>  
-  <p><i class="far fa-play-circle word-sound"></i> / ${word.transcription} /</p>
+  <hr>  
+  <p><i class="far fa-play-circle word-sound btn-for-book"></i> / ${word.transcription} /</p>
   <p class="specification">Использование:</p>
   <ul class="meaning">
   <li>${word.textMeaning}</li>
@@ -211,7 +217,7 @@ function createLearnedHeader(rootElement: HTMLDivElement) {
   const containerText = document.createElement('div');
   containerText.className = 'learned-page';
   containerText.innerHTML = `
-  <p class="text-learned"><i class="far fa-check-circle"></i>Страница выучена!</p>
+  <p class="text-learned"><i class="far fa-check-circle"></i> Страница выучена!</p>
   `;
   rootElement.innerHTML = '';
   rootElement.appendChild(containerText);
@@ -283,7 +289,9 @@ export function createNavigation(group: number, page: number, rootElement: HTMLD
   <div class="games-menu">
   <p class="pagination-icon"><i class="fas fa-gamepad icon dropdown-btn"></i></p>
   <div class="dropdown-content">
-  <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Аудио-вызов</a>
+    <a href="${HashPath.audioCallPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">
+      Аудио-вызов
+    </a>
   <a href="${HashPath.sprintPage}?${BookParam.Group}=${group}&${BookParam.Page}=${page}">Спринт</a>
   </div>
   </div>

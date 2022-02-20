@@ -1,14 +1,9 @@
 .book-header {
-  font-family: $font-ui;
-  color: $navy;
-  font-weight: 600;
-  font-size: 30px;
-  padding: 10px;
-  line-height: 36px;
+  @include font($font_ui, $font_l, $navy, 62px, $font_regular);
   text-align: center;
-  letter-spacing: 3px;
   background-color: $white;
   @include shadow;
+  border-radius: 10px;
 }
 
 .book-content {
@@ -16,7 +11,7 @@
   width: 100%;
   margin: 0 auto;
   padding-top: 20px;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .sections {
@@ -25,32 +20,35 @@
   ol {
     list-style-type: none;
     li {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
+      margin-bottom: 10px;
+      border-radius: 10px;
       background-color: $white;
       @include shadow;
+      cursor: pointer;
+      transition: $tr_time;
       a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         text-decoration: none;
-        font-family: $font-ui;
-        color: $black;
-        font-size: 24px;
-        line-height: 28px;
+        padding: 8px;
+        @include font($font_ui, $font_l, $black, 150%);
       }
+    }
+
+    li:hover {
+      background-color: $green_light;
     }
   }
 }
 
 .description-book {
   width: 55%;
-  margin-top: 5px;
-  font-family: $font-c;
-  color: $black;
-  font-size: $font_m;
-  letter-spacing: 1px;
+  @include font($font_c, $font_m, $black, 150%);
   background-color: $white;
   @include shadow;
   padding: 20px;
+  border-radius: 10px;
 }
 
 .rules {
@@ -80,4 +78,9 @@
 
 .extention {
   color: $red;
+}
+
+hr {
+  margin-bottom: 8px;
+  border: 1px solid $gray_light;
 }
