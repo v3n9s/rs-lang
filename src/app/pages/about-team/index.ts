@@ -6,12 +6,20 @@ const pageContent = (): HTMLElement => {
   node.className = 'main__container';
 
   node.innerHTML = `
-    <br>
-    <br>
-    <h1>О команде</h1>
-    <p>1, 2, 3.</p>
-    <br>
-    <br>`;
+    <section class="home">
+      <div class="home__header-container">
+        <h2 class="home__caption">Наша команда</h2>
+      </div>
+      <div class="about__content-container">
+        123
+        <br />
+        123
+        <br />
+        123
+        <br />
+        123
+      </div>
+    </section>`;
 
   return node;
 };

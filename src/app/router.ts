@@ -6,6 +6,15 @@ import { getBookPage } from './pages/book';
 import { getHomePage } from './pages/home';
 import { getNotFoundPage } from './pages/not-found';
 import { getStatsPage } from './pages/stats';
+import {
+  DIFFICULT_GROUP_INDEX,
+  MAX_GROUP_INDEX,
+  MAX_PAGE_INDEX,
+  NOT_SET,
+  SITE_ORIGIN,
+} from './const';
+import { addACGameKeyboardAction } from './pages/game-audio-call/keyboad-control';
+import { store } from './redux/store';
 
 export type TPageComponent = (params: IBookNav) => void;
 
@@ -72,7 +81,7 @@ export function findComponentByPath(
 }
 
 export function isValidParams(params: string): boolean {
-  const url = new URL('http://localhost:5000/');
+  const url = new URL(SITE_ORIGIN);
   url.search = params;
 
   if (params === '') {
@@ -83,15 +92,23 @@ export function isValidParams(params: string): boolean {
   const page = url.searchParams.get(BookParam.Page);
 
   if (group && page) {
-    const groupNum = +group;
-    const pageNum = +page;
+    const groupIndex = +group;
+    const pageIndex = +page;
 
-    if (Number.isInteger(groupNum) && Number.isInteger(pageNum)) {
-      if (groupNum >= 0 && groupNum <= 5 && pageNum >= 0 && pageNum <= 29) {
+    if (Number.isInteger(groupIndex) && Number.isInteger(pageIndex)) {
+      if (
+        groupIndex >= 0 &&
+        groupIndex <= MAX_GROUP_INDEX &&
+        pageIndex >= 0 &&
+        pageIndex <= MAX_PAGE_INDEX
+      ) {
         return true;
       }
-      if (groupNum === 6 && pageNum === 0) {
-        return true;
+      if (groupIndex === DIFFICULT_GROUP_INDEX && pageIndex === 0) {
+        const userId = store.getState().user.userId;
+        if (userId) {
+          return true;
+        }
       }
     }
   }
@@ -101,11 +118,11 @@ export function isValidParams(params: string): boolean {
 export function parseValidParams(params: string): IBookNav {
   if (params === '') {
     return {
-      group: -1,
-      page: -1,
+      group: NOT_SET,
+      page: NOT_SET,
     };
   }
-  const url = new URL('http://localhost:5000/');
+  const url = new URL(SITE_ORIGIN);
   url.search = params;
   const group = Number(url.searchParams.get(BookParam.Group) as string);
   const page = Number(url.searchParams.get(BookParam.Page) as string);
@@ -115,13 +132,15 @@ export function parseValidParams(params: string): IBookNav {
   };
 }
 
-const defaultBookLocation: IBookNav = { group: -1, page: -1 };
+const defaultBookLocation: IBookNav = { group: NOT_SET, page: NOT_SET };
 
 export function router(): void {
   const { hashPath, searchParams } = parseLocation(location);
   const hashPathComponent = findComponentByPath(hashPath, routes);
 
   if (hashPathComponent) {
+    addACGameKeyboardAction(false);
+
     if (hashPathComponent.hasParams && isValidParams(searchParams)) {
       hashPathComponent.componentFunc(parseValidParams(searchParams));
     } else {

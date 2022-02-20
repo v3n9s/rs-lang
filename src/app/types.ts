@@ -17,6 +17,14 @@ export interface IBookNav {
   page: number;
 }
 
+export enum Endpoint {
+  Words = '/words',
+  Users = '/users',
+  Singin = '/signin',
+  Tokens = '/tokens',
+  AggregatedWords = '/aggregatedwords',
+}
+
 export interface IWord {
   id: string;
   group: number;
@@ -33,4 +41,3 @@ export interface IWord {
   textMeaningTranslate: string;
   textExampleTranslate: string;
 }
-

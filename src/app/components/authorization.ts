@@ -12,7 +12,7 @@ function showLoader(show: Boolean): void {
   }
 }
 
-function showMessage(msg: string): void {
+export function showMessage(msg: string): void {
   const infoMessage = document.createElement('div');
   infoMessage.className = 'info';
   infoMessage.innerHTML = msg;
@@ -123,9 +123,6 @@ async function loginFormHandler(form: HTMLFormElement): Promise<void> {
           const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
           modal.remove();
 
-          showMessage(res.message);
-          const authBtn = document.querySelector('#auth-btn') as HTMLButtonElement;
-          updateAuthButton(authBtn);
           location.reload();
           break;
         case 403:

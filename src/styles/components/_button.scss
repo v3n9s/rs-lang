@@ -1,0 +1,28 @@
+.default-btn {
+  background-color: $white;
+  @include font($font_ui, $font_m, $navy, 150%, $font_bold);
+  padding: 8px 20px;
+  border: 1px solid $navy_light;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: $tr_time;
+}
+
+.default-btn:hover {
+  background-color: $green_light;
+  color: $black;
+}
+
+.default-btn:active {
+  background-color: $green;
+  color: $black;
+}
+
+.default-btn:disabled {
+  border: 1px solid $gray_light;
+  color: $gray_light;
+}
+
+.default-btn:disabled:hover {
+  background-color: $white;
+}

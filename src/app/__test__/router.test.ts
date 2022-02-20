@@ -1,4 +1,4 @@
-import { SITE_ORIGIN } from '../const';
+import { SITE_TEST_ORIGIN } from '../const';
 import {
   findComponentByPath,
   getHashPath,
@@ -68,7 +68,7 @@ describe('Test "getSearchParams" function', () => {
 });
 
 describe('Test "parseLocation" function', () => {
-  const loc = new URL(`${SITE_ORIGIN}#/home`);
+  const loc = new URL(`${SITE_TEST_ORIGIN}#/home`);
 
   let result = {
     hashPath: '#/home',

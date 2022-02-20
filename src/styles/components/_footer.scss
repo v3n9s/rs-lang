@@ -34,7 +34,7 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: $media_size_940) {
   .footer {
     &__links-container {
       flex-direction: column;
