@@ -98,7 +98,7 @@
 
   .some-word {
     width: 52%;
-    padding: 5px;
+
     font-size: $font_s;
     font-family: $font-c;
     line-height: 28px;
@@ -113,6 +113,7 @@
 
 .user-choose {
   text-align: center;
+  margin-top: 5px;
 }
 
 .user-difficult,
