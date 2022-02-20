@@ -80,3 +80,16 @@
     }
   }
 }
+
+@media screen and (max-width: $media_size_940) {
+  .home {
+    padding: 0;
+  }
+
+  .home__rs-lang-logo {
+    margin: 30px 0 0 10px;
+    width: 140px;
+    height: 140px;
+    align-self: flex-start;
+  }
+}
