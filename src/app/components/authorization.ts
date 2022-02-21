@@ -2,6 +2,7 @@ import { store } from '../redux/store';
 import { removeUser, updateUser } from '../redux/user';
 import { createUser } from '../api/create-new-user';
 import { ILoginedUser, loginUser } from '../api/sign-in';
+import { updateTokenTime } from '../redux/token-time';
 
 function showLoader(show: Boolean): void {
   const loader = document.querySelector('.login-loader') as HTMLDivElement;
@@ -119,7 +120,7 @@ async function loginFormHandler(form: HTMLFormElement): Promise<void> {
       switch (res.status) {
         case 200:
           store.dispatch(updateUser(res.payload as ILoginedUser));
-
+          store.dispatch(updateTokenTime(Date.now()));
           const modal = document.querySelector('#modal-wrapper') as HTMLDivElement;
           modal.remove();
 
@@ -190,7 +191,7 @@ export function authButtonHandler(node: HTMLElement): void {
   authBtn.addEventListener('click', () => {
     if (store.getState().user.token) {
       store.dispatch(removeUser());
-      updateAuthButton(authBtn);
+
       location.reload();
     } else {
       openAuthModal();

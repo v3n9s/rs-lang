@@ -2,9 +2,10 @@ import { getNewToken } from '../../api/users';
 import { DB_ORIGIN } from '../../const';
 import { store } from '../../redux/store';
 import { BookParam, Endpoint } from '../../types';
+import { IUserWord } from './data-tmp';
 import { IUserAggregatedWordData, IUserAggrResponse, IWordData } from './types';
 
-interface IDataResponse<T> {
+export interface IDataResponse<T> {
   status: number;
   msg: string;
   payload: T;
@@ -112,5 +113,95 @@ export async function getUsersAggregatedWordsList(
     }
   } else {
     throw new Error('The function should be applied for authorized user only!');
+  }
+}
+
+export interface IUserWordResponse extends IUserWord {
+  id: string;
+  wordId: string;
+}
+
+export async function getUserWord(
+  wordId: string,
+): Promise<IDataResponse<IUserWordResponse | null>> {
+  const userId = store.getState().user.userId;
+  const token = store.getState().user.token;
+  try {
+    const res = await fetch(`${DB_ORIGIN}${Endpoint.Users}/${userId}${Endpoint.Words}/${wordId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    switch (res.status) {
+      case 200:
+        const data = (await res.json()) as IUserWordResponse;
+        return {
+          status: res.status,
+          msg: 'Ok',
+          payload: data,
+        };
+      case 404:
+        return {
+          status: res.status,
+          msg: wordId,
+          payload: null,
+        };
+      default:
+        return {
+          status: 0,
+          msg: 'Unhandled status in function getUserWord',
+          payload: null,
+        };
+    }
+  } catch {
+    throw new Error('Error in catch of getUserWord function.');
+  }
+}
+
+export interface IStatsData {
+  id: string;
+  learnedWords: number;
+  optional?: {
+    audiocall?: number;
+    sprint?: number;
+  };
+}
+
+export async function getUserStats(): Promise<IDataResponse<IStatsData | null>> {
+  const userId = store.getState().user.userId;
+  const token = store.getState().user.token;
+  try {
+    const res = await fetch(`${DB_ORIGIN}${Endpoint.Users}/${userId}/statistics`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    switch (res.status) {
+      case 200:
+        const data = (await res.json()) as IStatsData;
+        return {
+          status: res.status,
+          msg: 'Ok',
+          payload: data,
+        };
+      case 404:
+        return {
+          status: res.status,
+          msg: 'Not found',
+          payload: null,
+        };
+      default:
+        return {
+          status: 0,
+          msg: 'Unhandled status in function getUserWord',
+          payload: null,
+        };
+    }
+  } catch {
+    throw new Error('Error in catch of getUserWord function.');
   }
 }

@@ -15,6 +15,7 @@ import {
 } from './const';
 import { addACGameKeyboardAction } from './pages/game-audio-call/keyboad-control';
 import { store } from './redux/store';
+import { getNewToken } from './api/users';
 
 export type TPageComponent = (params: IBookNav) => void;
 
@@ -134,7 +135,21 @@ export function parseValidParams(params: string): IBookNav {
 
 const defaultBookLocation: IBookNav = { group: NOT_SET, page: NOT_SET };
 
+async function checkToken(time: number): Promise<void> {
+  const savedTime = store.getState().tokenTime.value;
+  const isExpireToken = Date.now() - savedTime > time;
+  if (isExpireToken) {
+    await getNewToken();
+  }
+}
+
 export function router(): void {
+  const userId = store.getState().user.userId;
+  if (userId) {
+    const refreshTime = 1000 * 60 * 30;
+    checkToken(refreshTime);
+  }
+
   const { hashPath, searchParams } = parseLocation(location);
   const hashPathComponent = findComponentByPath(hashPath, routes);
 

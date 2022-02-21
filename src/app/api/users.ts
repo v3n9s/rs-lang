@@ -1,6 +1,7 @@
 import { DB_ORIGIN } from '../const';
 import { store } from '../redux/store';
-import { updateToken } from '../redux/user';
+import { updateTokenTime } from '../redux/token-time';
+import { removeUser, updateToken } from '../redux/user';
 import { Endpoint } from '../types';
 import { ILoginedUser } from './sign-in';
 
@@ -20,11 +21,12 @@ export async function getNewToken(): Promise<number | void> {
         case 200:
           const newUserData = (await res.json()) as ILoginedUser;
           store.dispatch(updateToken(newUserData));
+          store.dispatch(updateTokenTime(Date.now()));
           return res.status;
         case 401:
         case 403:
-          // ?? logout here + message with showMessage function
-          return res.status;
+          store.dispatch(removeUser());
+          location.reload();
         default:
           console.error('Unknown response STATUS', res.status, res.statusText);
           return res.status;

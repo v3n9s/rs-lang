@@ -7,9 +7,8 @@ export enum UserWord {
   Notfound = 'notfound',
 }
 
-const token = store.getState().user.token;
-
 export const getUserWord = async (userId: string, wordId: string): Promise<UserWord> => {
+  const token = store.getState().user.token;
   const rawResponsePromise = fetch(
     `https://rs-school-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
     {
