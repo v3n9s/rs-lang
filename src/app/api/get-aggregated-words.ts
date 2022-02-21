@@ -1,6 +1,7 @@
 import { DB_ORIGIN } from '../const';
 import { replaceRequestHeaders } from './utils/replace-request-headers';
 import { getAuthorizationHeaders } from './utils/get-authorization-headers';
+import { IWord } from '../types';
 
 interface IGetAggregatedWords {
   userId: string;
@@ -8,23 +9,6 @@ interface IGetAggregatedWords {
   page?: number;
   wordsPerPage?: number;
   filter?: object;
-}
-
-export interface IWord {
-  _id: string;
-  audio: string;
-  audioExample: string;
-  audioMeaning: string;
-  group: number;
-  image: string;
-  page: number;
-  textExample: string;
-  textExampleTranslate: string;
-  textMeaning: string;
-  textMeaningTranslate: string;
-  transcription: string;
-  word: string;
-  wordTranslate: string;
 }
 
 export async function getAggregatedWords(

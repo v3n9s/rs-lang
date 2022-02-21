@@ -1,5 +1,7 @@
 import { store } from '../../redux/store';
-import { IWord, getAggregatedWords } from '../../api/get-aggregated-words';
+import { IWord } from '../../types';
+import { getAggregatedWords } from '../../api/get-aggregated-words';
+import { getWords } from '../../api/get-words';
 import { HashPath } from '../../types';
 
 import { startView, loadingView, gameView, resultsView } from './layout';
@@ -189,6 +191,8 @@ async function startGame({ group, page }:{ group: number, page: number }) {
   const { userId } = store.getState().user;
   if (userId) {
     words = (await getAggregatedWords({ userId, group, wordsPerPage: 4000 })).words.filter((word) => word.page <= page);
+  } else {
+    words = await getWords(group, page);
   }
   gameContainer.innerHTML = gameView;
   nextLevel();
