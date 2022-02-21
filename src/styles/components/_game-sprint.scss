@@ -1,0 +1,161 @@
+.game-sprint {
+  &__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    min-height: 300px;
+    height: calc(100vh - 145px);
+    overflow-y: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+
+  &__text {
+    @include font($font-ui, $font-xl);
+    text-align: center;
+
+    &_word {
+      margin: 50px auto 0px;
+    }
+
+    &_translation {
+      margin: 50px auto 0px;
+    }
+  }
+
+  &__controls {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  &__start-controls {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+    transform: translate(-50%, -50%);
+  }
+
+  &__loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: $font-xl;
+  }
+
+  &__results {
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  &__results-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__results-controls {
+    margin: 15px 0px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  &__score {
+    @include font($font-ui, $font-xl);
+    text-align: center;
+  }
+
+  &__score-value {
+    font-weight: 900;
+  }
+}
+
+.game-sprint-button {
+  @include font($font-ui, $font-l, $navy);
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid $navy_light;
+  border-radius: 10px;
+  transition: background-color $tr-time, color $tr-time;
+
+  &_center {
+    margin: 0px auto;
+    display: block;
+  }
+
+  &:hover {
+    color: $black;
+    background-color: $green_light;
+    cursor: pointer;
+  }
+
+  &_wrong:hover {
+    background-color: $red_light;
+  }
+}
+
+.game-sprint-level {
+  @include font($font-ui, $font-l);
+  padding: 10px 0px;
+  display: flex;
+  align-items: center;
+
+  &_header {
+    font-size: 3rem;
+  }
+
+  &_right {
+    background-color: $green_light;
+  }
+
+  &_wrong {
+    background-color: $red_light;
+  }
+
+  &__item {
+    flex: 1 1 1px;
+    text-align: center;
+  }
+}
+
+.game-sprint-info {
+  @include font($font-ui, 3em);
+  margin: 30px 30px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-sprint-time {
+  position: relative;
+  color: $red;
+
+  &__item {
+    line-height: 1em;
+
+    &_overlay {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: 25px;
+      color: $black;
+      overflow: hidden;
+      transition: height 0s linear;
+
+      &_hidden {
+        height: 0%;
+      }
+    }
+  }
+}
+
+.game-sprint-ctrls {
+  &__start {}
+
+  &__difficulty {}
+}
