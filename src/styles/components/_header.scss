@@ -49,6 +49,8 @@
 }
 
 .sign-in-btn {
+  display: flex;
+  align-items: center;
   @include font($font_ui, $font_m, $navy, 100%, $font_bold);
   padding: 12px 20px;
   border-radius: 10px;
