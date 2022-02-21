@@ -1,5 +1,5 @@
 export const SITE_TEST_ORIGIN = 'http://localhost:5000';
-export const SITE_ORIGIN = 'http://localhost:5000';
+export const SITE_ORIGIN = 'https://rs-lang-team-wvk.netlify.app';
 
 export const DB_ORIGIN = 'https://rs-school-learnwords.herokuapp.com';
 

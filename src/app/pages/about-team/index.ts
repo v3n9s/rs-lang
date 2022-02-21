@@ -30,7 +30,7 @@ const teamData: ITeamMate[] = [
       авторизации, настройка базы данных и создание копии бэкэнда`,
   },
   {
-    name: 'Вениамин',
+    name: 'Вениамин Швець',
     img: photoVen,
     colorClass: 'person__box_n',
     github: 'https://github.com/v3n9s',
