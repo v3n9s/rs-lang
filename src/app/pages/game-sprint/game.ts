@@ -45,6 +45,7 @@ function clearGame() {
   score = 0;
   if (intervalId) clearInterval(intervalId);
   window.removeEventListener('hashchange', endGameOnViewChange);
+  document.removeEventListener('keydown', handleKeyDown);
 }
 
 function handleResultsClick(e: MouseEvent) {
@@ -172,6 +173,17 @@ function startTimer() {
   intervalId = setInterval(() => iteration(), 1000);
 }
 
+function handleKeyDown(e: KeyboardEvent) {
+  const button = e.code;
+  if (button === 'ArrowLeft') {
+    if (!isCurrentWordRight) onAnswer(true);
+    else onAnswer(false);
+  } else if (button === 'ArrowRight') {
+    if (isCurrentWordRight) onAnswer(true);
+    else onAnswer(false);
+  }
+}
+
 async function startGame({ group, page }:{ group: number, page: number }) {
   gameContainer.innerHTML = loadingView;
   const { userId } = store.getState().user;
@@ -184,6 +196,7 @@ async function startGame({ group, page }:{ group: number, page: number }) {
   startTimer();
 
   window.addEventListener('hashchange', endGameOnViewChange, { once: true });
+  document.addEventListener('keydown', handleKeyDown);
 }
 
 export function prepareGame({ group, page }:{ group: number, page: number }) {
