@@ -218,4 +218,7 @@ export function prepareGame({ group, page }:{ group: number, page: number }) {
   if (group !== -1) {
     difficultySelect.value = `${group}`;
   }
+  difficultySelect.addEventListener('change', () => {
+    group = +difficultySelect.value;
+  });
 }
