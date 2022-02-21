@@ -1,6 +1,7 @@
 import { store } from '../../redux/store';
 import { IWord } from '../../types';
 import { getAggregatedWords } from '../../api/get-aggregated-words';
+import { getDifficultWords } from '../../api/user-difficult-words';
 import { getWords } from '../../api/get-words';
 import { HashPath } from '../../types';
 
@@ -25,7 +26,7 @@ const POINTS_PER_LEVEL = 10;
 
 let gameContainer: HTMLDivElement;
 
-let words: IWord[];
+let words: IWord[] = [];
 
 let isCurrentWordRight: boolean;
 
@@ -190,7 +191,14 @@ async function startGame({ group, page }:{ group: number, page: number }) {
   gameContainer.innerHTML = loadingView;
   const { userId } = store.getState().user;
   if (userId) {
-    words = (await getAggregatedWords({ userId, group, wordsPerPage: 4000 })).words.filter((word) => word.page <= page);
+    if (group === 6) {
+      words = await getDifficultWords(userId);
+    } else {
+      words = (await getAggregatedWords({ userId, group, wordsPerPage: 4000 })).words.filter((word) => word.page <= page);
+    }
+    if (words.length <= 3) {
+      words = (await getAggregatedWords({ userId, group: 0, wordsPerPage: 4000 })).words.filter((word) => word.page <= page);
+    }
   } else {
     words = await getWords(group, page);
   }

@@ -8,6 +8,7 @@ export const startView = `
     <option value="3">4 Раздел</option>
     <option value="4">5 Раздел</option>
     <option value="5">6 Раздел</option>
+    <option value="6">Сложные слова</option>
   </select>
 </div>`;
 
