@@ -1,0 +1,95 @@
+.home {
+  padding: 0 20px;
+
+  &__header-container {
+    margin-bottom: 12px;
+    height: 62px;
+    border-radius: 10px;
+    background-color: $white;
+    @include shadow;
+  }
+
+  &__caption {
+    @include font($font_ui, $font_l, $navy, 62px, $font_regular);
+    text-align: center;
+  }
+
+  &__content-container {
+    border-radius: 10px;
+    background-color: $white;
+    @include shadow;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 60px;
+  }
+
+  &__background-img {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-image: url("./assets/webp/home-pic-cut-01.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right bottom;
+    filter: opacity(0.15);
+  }
+
+  &__h1-caption {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    @include font($font_ui, $font_xl, $black, 150%, $font_bold);
+    margin: 30px 0;
+    padding: 0 20px;
+    text-align: center;
+    z-index: 1;
+  }
+
+  &__description-text {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    justify-self: center;
+    max-width: 800px;
+    @include font($font_ui, $font_l, $black, 200%, $font_regular);
+    margin-bottom: 20px;
+    padding: 0 20px;
+    text-align: center;
+    z-index: 1;
+  }
+
+  &__rs-lang-logo {
+    align-self: center;
+    justify-self: end;
+  }
+
+  &__list {
+    padding: 30px 20px 30px 0;
+
+    &-caption {
+      margin-bottom: 20px;
+      @include font($font_ui, $font_l, $black, 150%, $font_bold);
+    }
+
+    &-item {
+      @include font($font_ui, $font_m, $black, 200%, $font_regular);
+
+      &-text {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $media_size_940) {
+  .home {
+    padding: 0;
+  }
+
+  .home__rs-lang-logo {
+    margin: 30px 0 0 10px;
+    width: 140px;
+    height: 140px;
+    align-self: flex-start;
+  }
+}

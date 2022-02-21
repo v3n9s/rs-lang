@@ -1,0 +1,86 @@
+.book-header {
+  @include font($font_ui, $font_l, $navy, 62px, $font_regular);
+  text-align: center;
+  background-color: $white;
+  @include shadow;
+  border-radius: 10px;
+}
+
+.book-content {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 20px;
+  justify-content: space-around;
+}
+
+.sections {
+  width: 35%;
+  text-align: center;
+  ol {
+    list-style-type: none;
+    li {
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background-color: $white;
+      @include shadow;
+      cursor: pointer;
+      transition: $tr_time;
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        padding: 8px;
+        @include font($font_ui, $font_l, $black, 150%);
+      }
+    }
+
+    li:hover {
+      background-color: $green_light;
+    }
+  }
+}
+
+.description-book {
+  width: 55%;
+  @include font($font_c, $font_m, $black, 150%);
+  background-color: $white;
+  @include shadow;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.rules {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .icon {
+    width: 5%;
+  }
+  .meaning {
+    width: 90%;
+  }
+}
+
+.far,
+.fas {
+  font-size: 20px;
+}
+
+.learned {
+  color: $green_dark;
+}
+
+.difficult {
+  color: $red;
+}
+
+.extention {
+  color: $red;
+}
+
+hr {
+  margin-bottom: 8px;
+  border: 1px solid $gray_light;
+}

@@ -1,0 +1,19 @@
+@import "./styles/style-reset";
+@import "./styles/variables";
+@import "./styles/mixin";
+@import "./styles/global";
+
+@import "./styles/components/loader";
+@import "./styles/components/header";
+@import "./styles/components/footer";
+@import "./styles/components/authorization";
+@import "./styles/components/button";
+
+@import "./styles/pages/not-found";
+@import "./styles/pages/home";
+@import "./styles/pages/audio-call";
+@import "./styles/pages/stats";
+@import "./styles/pages/about-team";
+@import "./styles/pages/book";
+@import "./styles/pages/book-sections";
+@import "./styles/components/game-sprint";
