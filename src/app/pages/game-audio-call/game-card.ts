@@ -137,9 +137,11 @@ export function createGamePlayView(): void {
 
     if (currGame.isOver()) {
       addACGameKeyboardAction(false);
-      showLoader(true);
-      await analyzeResults();
-      showLoader(false);
+      if (store.getState().user.userId) {
+        showLoader(true);
+        await analyzeResults();
+        showLoader(false);
+      }
       createGameResultView();
     } else {
       setupGameRound();
