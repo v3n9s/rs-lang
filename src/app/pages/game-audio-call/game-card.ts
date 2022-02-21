@@ -2,9 +2,10 @@ import { currGame } from '.';
 import { DB_ORIGIN } from '../../const';
 import { store } from '../../redux/store';
 import { WORDS_IN_ROUND } from './const';
-import { getIdNum, shuffle } from './utils';
+import { getIdNum, showLoader, shuffle } from './utils';
 import { createGameResultView } from './game-result';
 import { addACGameKeyboardAction } from './keyboad-control';
+import { analyzeResults } from './analyze-data';
 
 function createOptionBtns(container: HTMLDivElement): void {
   const btnIndices = [0, 1, 2, 3, 4];
@@ -130,12 +131,15 @@ export function createGamePlayView(): void {
   });
 
   const nextRoundBtn = node.querySelector('#next-round-btn') as HTMLButtonElement;
-  nextRoundBtn.addEventListener('click', () => {
+  nextRoundBtn.addEventListener('click', async () => {
     nextRoundBtn.disabled = true;
     currGame.nextRound();
 
     if (currGame.isOver()) {
       addACGameKeyboardAction(false);
+      showLoader(true);
+      await analyzeResults();
+      showLoader(false);
       createGameResultView();
     } else {
       setupGameRound();

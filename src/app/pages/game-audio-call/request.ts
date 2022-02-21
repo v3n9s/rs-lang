@@ -114,3 +114,42 @@ export async function getUsersAggregatedWordsList(
     throw new Error('The function should be applied for authorized user only!');
   }
 }
+
+// interface IUserWord {
+//   id: string,
+//   difficulty: string,
+//   wordId: string,
+// }
+
+export async function getUserWord(wordId: string): Promise<IDataResponse<null>> {
+  const userId = store.getState().user.userId;
+  const token = store.getState().user.token;
+  try {
+    const res = await fetch(`${DB_ORIGIN}${Endpoint.Users}/${userId}${Endpoint.Words}/${wordId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    switch (res.status) {
+      case 200:
+        const data = await res.json();
+        console.log(data);
+
+        return {
+          status: res.status,
+          msg: 'Ok',
+          payload: null,
+        };
+      default:
+        return {
+          status: 0,
+          msg: 'Unhandled status in function getUserWord',
+          payload: null,
+        };
+    }
+  } catch {
+    throw new Error('Error in catch of getUserWord function.');
+  }
+}
